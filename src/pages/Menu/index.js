@@ -1,4 +1,4 @@
-import { Avatar, Rate, Space, Table, Typography } from "antd";
+import { Avatar, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { getMenu } from "../../API";
 
@@ -9,13 +9,13 @@ function Menu() {
   useEffect(() => {
     setLoading(true);
     getMenu().then((res) => {
-      setDataSource(res);
+      setDataSource(res.data);
       setLoading(false);
     });
   }, []);
 
   return (
-    <Space size={20} direction="vertical">
+    <Space size={20} direction="vertical" style={{ marginRight: 10 }}>
       <Typography.Title level={4}>Menu</Typography.Title>
       <Table
         loading={loading}

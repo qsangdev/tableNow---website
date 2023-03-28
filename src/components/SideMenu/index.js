@@ -1,5 +1,5 @@
 import {
-  FieldTimeOutlined,
+  CalendarOutlined,
   HomeOutlined,
   MenuOutlined,
   ShoppingCartOutlined,
@@ -41,14 +41,14 @@ function SideMenu() {
             icon: <MenuOutlined />,
           },
           {
-            label: "Orders",
-            key: "/orders",
+            label: "Revenue",
+            key: "/revenue",
             icon: <ShoppingCartOutlined />,
           },
           {
-            label: "Times",
-            key: "/times",
-            icon: <FieldTimeOutlined />,
+            label: "Reservation",
+            key: "/reservation",
+            icon: <CalendarOutlined />,
           },
           {
             label: "Staffs",

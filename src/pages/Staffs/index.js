@@ -9,7 +9,7 @@ function Staffs() {
   useEffect(() => {
     setLoading(true);
     getStaffs().then((res) => {
-      setDataSource(res);
+      setDataSource(res.data);
       setLoading(false);
     });
   }, []);
@@ -43,10 +43,6 @@ function Staffs() {
           {
             title: "User Name",
             dataIndex: "userName",
-          },
-          {
-            title: "Password",
-            dataIndex: "password",
           },
         ]}
       ></Table>

@@ -11,7 +11,7 @@ const Ratings = () => {
     try {
       setLoading(true);
       await getRating().then((res) => {
-        setRating(res);
+        setRating(res.data);
         setLoading(false);
       });
     } catch (e) {

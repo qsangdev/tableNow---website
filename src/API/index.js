@@ -1,23 +1,29 @@
+import axios from "axios";
+
 export const getBills = () => {
-  return fetch("http://localhost:3000/bills").then((res) => res.json());
+  return axios.get("http://localhost:3000/bills");
 };
 
 export const getMenu = () => {
-  return fetch("http://localhost:3000/menu").then((res) => res.json());
+  return axios.get("http://localhost:3000/menu");
 };
 
 export const getStaffs = () => {
-  return fetch("http://localhost:3000/staffs").then((res) => res.json());
+  return axios.get("http://localhost:3000/staffs");
 };
 
 export const getDashboard = () => {
-  return fetch("http://localhost:3000/profile").then((res) => res.json());
+  return axios.get("http://localhost:3000/profile");
 };
 
-export const getTimes = () => {
-  return fetch("http://localhost:3000/times").then((res) => res.json());
+export const getReservation = () => {
+  return axios.get("http://localhost:3000/shift");
 };
 
 export const getRating = () => {
-  return fetch("http://localhost:3000/rate").then((res) => res.json());
+  return axios.get("http://localhost:3000/rate");
+};
+
+export const getImages = () => {
+  return axios.get("http://localhost:3000/images");
 };

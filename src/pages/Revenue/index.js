@@ -36,9 +36,9 @@ function Orders() {
   const getData = async () => {
     setLoading(true);
     await getBills().then((res) => {
-      setOrders(res);
-      setRevenue(res);
-      setCustomers(res);
+      setOrders(res.data);
+      setRevenue(res.data);
+      setCustomers(res.data);
     });
     setLoading(false);
   };
@@ -57,7 +57,7 @@ function Orders() {
 
   return (
     <Space size={20} direction="vertical">
-      <Typography.Title level={4}>Orders</Typography.Title>
+      <Typography.Title level={4}>Revenue</Typography.Title>
       {loading === true ? (
         <Spin />
       ) : (
@@ -114,6 +114,7 @@ function Orders() {
         </Space>
       )}
 
+      <Typography.Text>Recent Orders</Typography.Text>
       <Layout>
         <RecentOrders />
       </Layout>
@@ -139,50 +140,47 @@ function RecentOrders() {
   useEffect(() => {
     setLoading(true);
     getBills().then((res) => {
-      setDataSource(res.splice(0, 3));
+      setDataSource(res.data.splice(0, 3));
       setLoading(false);
     });
   }, []);
 
   return (
-    <>
-      <Typography.Text>Recent Orders</Typography.Text>
-      <Table
-        columns={[
-          {
-            title: "Time",
-            dataIndex: "time",
+    <Table
+      columns={[
+        {
+          title: "Time",
+          dataIndex: "time",
+        },
+        {
+          title: "Peoples",
+          dataIndex: "people",
+        },
+        {
+          title: "Dish",
+          dataIndex: "dish",
+          render: (dish) => {
+            return (
+              <span style={{ flexDirection: "column", display: "flex" }}>
+                {dish.map((e) => (
+                  <span>● {e.title}</span>
+                ))}
+              </span>
+            );
           },
-          {
-            title: "Peoples",
-            dataIndex: "people",
+        },
+        {
+          title: "Total Discounted",
+          dataIndex: "totalDiscounted",
+          render: (total) => {
+            return <span>${total}</span>;
           },
-          {
-            title: "Dish",
-            dataIndex: "dish",
-            render: (dish) => {
-              return (
-                <span style={{ flexDirection: "column", display: "flex" }}>
-                  {dish.map((e) => (
-                    <span>● {e.title}</span>
-                  ))}
-                </span>
-              );
-            },
-          },
-          {
-            title: "Total Discounted",
-            dataIndex: "totalDiscounted",
-            render: (total) => {
-              return <span>${total}</span>;
-            },
-          },
-        ]}
-        loading={loading}
-        dataSource={dataSource}
-        pagination={false}
-      ></Table>
-    </>
+        },
+      ]}
+      loading={loading}
+      dataSource={dataSource}
+      pagination={false}
+    ></Table>
   );
 }
 
@@ -194,10 +192,10 @@ function DashboardChart() {
 
   useEffect(() => {
     getBills().then((res) => {
-      const labels = res.map((cart) => {
+      const labels = res.data.map((cart) => {
         return `User-${cart.id}`;
       });
-      const data = res.map((cart) => {
+      const data = res.data.map((cart) => {
         return cart.totalDiscounted;
       });
 

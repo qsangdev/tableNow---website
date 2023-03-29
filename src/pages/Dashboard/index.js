@@ -167,17 +167,17 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Space direction="vertical">
+    <Space direction="vertical" style={{ alignItems: "center" }}>
       <Layout style={{ marginBottom: 20 }}>
         <Typography.Title level={3}>Infomation</Typography.Title>
         <Card
           title={"Name"}
           size="small"
           loading={loading}
-          style={{ marginTop: 10 }}
+          style={{ marginTop: 10, width: "700px" }}
         >
           <Input
-            style={{ maxWidth: "610px", marginRight: 10, height: "39px" }}
+            style={{ width: "600px", marginRight: 10, height: "39px" }}
             placeholder={dataSource.name}
             disabled={disabledName}
             onChange={(e) => setName(e.target.value)}
@@ -210,7 +210,13 @@ const Dashboard = () => {
           {times.length > 0 ? (
             times.map((e) => {
               return (
-                <Layout key={e.id} style={{ flexDirection: "row", padding: 5 }}>
+                <Layout
+                  key={e.id}
+                  style={{
+                    flexDirection: "row",
+                    padding: 5,
+                  }}
+                >
                   <Typography.Title
                     level={5}
                     style={{ marginTop: 9, marginLeft: 30, marginRight: 30 }}
@@ -221,7 +227,7 @@ const Dashboard = () => {
                   <TimePicker.RangePicker
                     format={"HH:mm"}
                     disabled={disabledTimesId !== e.id}
-                    style={{ width: "400px", marginRight: 10, height: "39px" }}
+                    style={{ width: "390px", marginRight: 10, height: "39px" }}
                     status="error"
                     onChange={(e) =>
                       setTime({
@@ -262,7 +268,7 @@ const Dashboard = () => {
           style={{ marginTop: 10 }}
         >
           <Input
-            style={{ width: "610px", marginRight: 10, height: "39px" }}
+            style={{ width: "600px", marginRight: 10, height: "39px" }}
             placeholder={dataSource.location}
             disabled={disabledAddress}
             onChange={(e) => setAddress(e.target.value)}
@@ -293,7 +299,7 @@ const Dashboard = () => {
           style={{ marginTop: 10 }}
         >
           <Input
-            style={{ width: "610px", marginRight: 10, height: "39px" }}
+            style={{ width: "600px", marginRight: 10, height: "39px" }}
             placeholder={dataSource.description}
             disabled={disabledDes}
             onChange={(e) => setDescription(e.target.value)}
@@ -318,90 +324,89 @@ const Dashboard = () => {
           )}
         </Card>
       </Layout>
-      <Layout>
-        <Typography.Title level={3}>Images</Typography.Title>
-        <Layout>
-          {editImage ? (
-            <List
-              loading={loading}
-              dataSource={images}
-              grid={{
-                xs: 1,
-                sm: 1.5,
-                md: 2,
-                lg: 3,
-                xl: 3.5,
-                xxl: 4,
-              }}
-              renderItem={(e) => {
-                return (
-                  <Card
-                    key={e.id}
-                    style={{
-                      margin: 10,
-                    }}
-                  >
-                    <Tooltip title="delete">
-                      <Button
-                        onClick={() => showConfirm(e.id)}
-                        style={{
-                          position: "absolute",
-                          right: 0,
-                          top: 0,
-                        }}
-                        type="primary"
-                        shape="circle"
-                        danger
-                        icon={<CloseOutlined />}
-                      />
-                    </Tooltip>
-                    <Image src={e.src}></Image>
-                  </Card>
-                );
-              }}
-            ></List>
-          ) : (
-            <List
-              loading={loading}
-              dataSource={images}
-              grid={{
-                xs: 1,
-                sm: 1.5,
-                md: 2,
-                lg: 3,
-                xl: 3.5,
-                xxl: 4,
-              }}
-              renderItem={(e) => {
-                return (
-                  <Card
-                    key={e.id}
-                    style={{
-                      margin: 10,
-                    }}
-                  >
-                    <Image src={e.src}></Image>
-                  </Card>
-                );
-              }}
-            ></List>
-          )}
-        </Layout>
-        <Layout style={{ flexDirection: "row" }}>
-          {editImage ? (
-            <Button onClick={handleEditImage} style={{ margin: 10 }} danger>
-              Done
-            </Button>
-          ) : (
-            <Button onClick={handleEditImage} style={{ margin: 10 }}>
-              Edit
-            </Button>
-          )}
-          <Upload>
-            <Button style={{ margin: 10 }}>Click to Upload</Button>
-          </Upload>
-        </Layout>
+
+      <Typography.Title level={3}>Images</Typography.Title>
+      <Layout style={{ flexDirection: "row" }}>
+        {editImage ? (
+          <Button onClick={handleEditImage} style={{ margin: 10 }} danger>
+            Done
+          </Button>
+        ) : (
+          <Button onClick={handleEditImage} style={{ margin: 10 }}>
+            Edit
+          </Button>
+        )}
+        <Upload>
+          <Button style={{ margin: 10 }}>Upload</Button>
+        </Upload>
       </Layout>
+      {editImage ? (
+        <List
+          style={{}}
+          loading={loading}
+          dataSource={images}
+          grid={{
+            xs: 1,
+            sm: 1.5,
+            md: 2,
+            lg: 3,
+            xl: 3.5,
+            xxl: 4,
+          }}
+          renderItem={(e) => {
+            return (
+              <Card
+                key={e.id}
+                style={{
+                  margin: 10,
+                }}
+              >
+                <Tooltip title="delete">
+                  <Button
+                    onClick={() => showConfirm(e.id)}
+                    style={{
+                      position: "absolute",
+                      right: 0,
+                      top: 0,
+                    }}
+                    type="primary"
+                    shape="circle"
+                    danger
+                    icon={<CloseOutlined />}
+                  />
+                </Tooltip>
+                <Image src={e.src}></Image>
+              </Card>
+            );
+          }}
+        ></List>
+      ) : (
+        <List
+          style={{}}
+          loading={loading}
+          dataSource={images}
+          grid={{
+            xs: 1,
+            sm: 1.5,
+            md: 2,
+            lg: 3,
+            xl: 3.5,
+            xxl: 4,
+          }}
+          renderItem={(e) => {
+            return (
+              <Card
+                key={e.id}
+                style={{
+                  margin: 10,
+                }}
+              >
+                <Image src={e.src}></Image>
+              </Card>
+            );
+          }}
+        ></List>
+      )}
     </Space>
   );
 };

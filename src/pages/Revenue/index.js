@@ -115,9 +115,7 @@ function Orders() {
       )}
 
       <Typography.Text>Recent Orders</Typography.Text>
-      <Layout>
-        <RecentOrders />
-      </Layout>
+      <RecentOrders />
       <DashboardChart />
     </Space>
   );
@@ -163,7 +161,7 @@ function RecentOrders() {
             return (
               <span style={{ flexDirection: "column", display: "flex" }}>
                 {dish.map((e) => (
-                  <span>● {e.title}</span>
+                  <span>- {e.title}</span>
                 ))}
               </span>
             );

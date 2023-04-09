@@ -1,18 +1,27 @@
-import AppFooter from "./components/AppFooter";
-import AppHeader from "./components/AppHeader";
-import Content from "./components/PageContent";
-import SideMenu from "./components/SideMenu";
+import Register from "./components/Register";
 import "./App.css";
+import AppHeader from "./components/AppHeader";
+import SideMenu from "./components/SideMenu";
+import Content from "./components/PageContent";
+import AppFooter from "./components/AppFooter";
 
 function App() {
+  const access_token = localStorage.getItem("access_token");
+
   return (
     <div className="App">
-      <AppHeader />
-      <div className="SideMenuAndPageContent">
-        <SideMenu />
-        <Content />
-      </div>
-      <AppFooter />
+      {access_token ? (
+        <>
+          <AppHeader />
+          <div className="SideMenuAndPageContent">
+            <SideMenu />
+            <Content />
+          </div>
+          <AppFooter />
+        </>
+      ) : (
+        <Register />
+      )}
     </div>
   );
 }

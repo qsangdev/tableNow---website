@@ -29,7 +29,7 @@ const Ratings = () => {
       <List
         grid={{
           xs: 1,
-          sm: 1.5,
+          sm: 2,
           md: 2,
           lg: 3,
           xl: 3.5,

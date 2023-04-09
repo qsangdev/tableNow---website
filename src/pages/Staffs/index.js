@@ -14,28 +14,39 @@ import { useEffect, useState } from "react";
 import { getStaffs } from "../../API";
 import {
   CloseOutlined,
+  EditOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons/lib/icons";
 
 function Staffs() {
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
-  const [editStaff, setEditStaff] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleEditStaff = () => {
-    setEditStaff(!editStaff);
+  const { confirm } = Modal;
+
+  const removeStaff = async (id) => {
+    confirm({
+      title: "Do you want to delete this staff?",
+      icon: <ExclamationCircleFilled />,
+      onOk() {
+        console.log("Ok", id);
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   const showModalStaff = () => {
     setIsModalOpen(true);
   };
 
-  const handleOkDish = () => {
+  const handleOk = () => {
     setIsModalOpen(false);
   };
 
-  const handleCancelDish = () => {
+  const handleCancel = () => {
     setIsModalOpen(false);
   };
 
@@ -53,28 +64,23 @@ function Staffs() {
 
   return (
     <Space size={20} direction="vertical">
-      <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <Layout
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop: 10,
+        }}
+      >
         <Typography.Title level={4}>Staffs</Typography.Title>
-        <Space style={{ flexDirection: "row", marginTop: 20 }}>
-          {editStaff ? (
-            <Button type="primary" danger onClick={handleEditStaff}>
-              Done
-            </Button>
-          ) : (
-            <Button type="primary" onClick={handleEditStaff}>
-              Edit
-            </Button>
-          )}
-          <Button type="primary" onClick={showModalStaff}>
-            Create
-          </Button>
-        </Space>
+        <Button type="primary" onClick={showModalStaff}>
+          Create
+        </Button>
       </Layout>
       <Modal
         title="Add new Staff"
         open={isModalOpen}
-        onOk={handleOkDish}
-        onCancel={handleCancelDish}
+        onOk={handleOk}
+        onCancel={handleCancel}
       >
         <span>Photo</span>
         <Upload>
@@ -85,84 +91,64 @@ function Staffs() {
         <Input style={{ marginBottom: 5 }} placeholder="User Name"></Input>
         <Input style={{ marginBottom: 5 }} placeholder="Password"></Input>
       </Modal>
-      {editStaff ? (
-        <Table
-          loading={loading}
-          dataSource={dataSource}
-          columns={[
-            {
-              title: "ID",
-              dataIndex: "id",
+      <Table
+        loading={loading}
+        dataSource={dataSource}
+        columns={[
+          {
+            title: "ID",
+            dataIndex: "id",
+          },
+          {
+            title: "Photo",
+            dataIndex: "photo",
+            render: (link) => {
+              return <Avatar size={70} src={link} />;
             },
-            {
-              title: "Photo",
-              dataIndex: "photo",
-              render: (link) => {
-                return <Avatar size={70} src={link} />;
-              },
-            },
-            {
-              title: "Name",
-              dataIndex: "name",
-            },
-            {
-              title: "Phone",
-              dataIndex: "phone",
-            },
-            {
-              title: "User Name",
-              dataIndex: "userName",
-            },
-            {
-              title: "Delete",
-              dataIndex: "id",
-              render: (id) => {
-                return (
-                  <Tooltip>
+          },
+          {
+            title: "Name",
+            dataIndex: "name",
+          },
+          {
+            title: "Phone",
+            dataIndex: "phone",
+          },
+          {
+            title: "User Name",
+            dataIndex: "userName",
+          },
+          {
+            title: "Delete",
+            dataIndex: "id",
+            render: (id) => {
+              return (
+                <>
+                  <Tooltip title="Edit">
                     <Button
-                      // onClick={() => removeDish(id)}
+                      style={{ margin: 5 }}
+                      onClick={() => {}}
+                      type="primary"
+                      shape="circle"
+                      icon={<EditOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <Button
+                      style={{ margin: 5 }}
+                      onClick={() => {}}
                       type="primary"
                       shape="circle"
                       danger
                       icon={<CloseOutlined />}
                     />
                   </Tooltip>
-                );
-              },
+                </>
+              );
             },
-          ]}
-        ></Table>
-      ) : (
-        <Table
-          loading={loading}
-          dataSource={dataSource}
-          columns={[
-            {
-              title: "ID",
-              dataIndex: "id",
-            },
-            {
-              title: "Photo",
-              dataIndex: "photo",
-              render: (link) => {
-                return <Avatar size={70} src={link} />;
-              },
-            },
-            {
-              title: "Name",
-              dataIndex: "name",
-            },
-            {
-              title: "Phone",
-              dataIndex: "phone",
-            },
-            {
-              title: "User Name",
-              dataIndex: "userName",
-            },
-          ]}
-        ></Table>
-      )}
+          },
+        ]}
+      ></Table>
     </Space>
   );
 }

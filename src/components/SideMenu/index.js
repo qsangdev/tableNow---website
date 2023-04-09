@@ -2,7 +2,7 @@ import {
   CalendarOutlined,
   HomeOutlined,
   MenuOutlined,
-  ShoppingCartOutlined,
+  DollarCircleOutlined,
   StarOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
@@ -31,7 +31,7 @@ function SideMenu() {
         selectedKeys={[selectedKeys]}
         items={[
           {
-            label: "Dashboard",
+            label: "Profile",
             icon: <HomeOutlined />,
             key: "/",
           },
@@ -41,9 +41,9 @@ function SideMenu() {
             icon: <MenuOutlined />,
           },
           {
-            label: "Revenue",
-            key: "/revenue",
-            icon: <ShoppingCartOutlined />,
+            label: "Staffs",
+            key: "/staffs",
+            icon: <UsergroupAddOutlined />,
           },
           {
             label: "Reservation",
@@ -51,9 +51,9 @@ function SideMenu() {
             icon: <CalendarOutlined />,
           },
           {
-            label: "Staffs",
-            key: "/staffs",
-            icon: <UsergroupAddOutlined />,
+            label: "Revenue",
+            key: "/revenue",
+            icon: <DollarCircleOutlined />,
           },
           {
             label: "Ratings",

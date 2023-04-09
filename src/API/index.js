@@ -16,9 +16,9 @@ export const getStaffs = () => {
   return axios.get("http://localhost:3000/staffs");
 };
 
-export const getDashboard = () => {
-  return axios.get("http://localhost:3000/profile");
-};
+// export const getProfile = () => {
+//   return axios.get("http://localhost:3001/api/profile/get-details/");
+// };
 
 export const getReservation = () => {
   return axios.get("http://localhost:3000/shift");

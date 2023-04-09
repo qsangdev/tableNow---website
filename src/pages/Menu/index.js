@@ -12,6 +12,7 @@ import {
 } from "antd";
 import {
   CloseOutlined,
+  EditOutlined,
   ExclamationCircleFilled,
 } from "@ant-design/icons/lib/icons";
 import { useEffect, useState } from "react";
@@ -22,18 +23,9 @@ function Menu() {
   const [loading, setLoading] = useState(false);
   const [dataDish, setDataDish] = useState([]);
   const [dataDrink, setDataDrink] = useState([]);
-  const [editDish, setEditDish] = useState(false);
-  const [editDrink, setEditDrink] = useState(false);
+
   const [isModalDish, setIsModalDish] = useState(false);
   const [isModalDrink, setIsModalDrink] = useState(false);
-
-  const handleEditDish = () => {
-    setEditDish(!editDish);
-  };
-
-  const handleEditDrink = () => {
-    setEditDrink(!editDrink);
-  };
 
   const showModalDish = () => {
     setIsModalDish(true);
@@ -113,22 +105,17 @@ function Menu() {
 
   return (
     <Space size={20} direction="vertical" style={{ marginRight: 10 }}>
-      <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <Layout
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop: 10,
+        }}
+      >
         <Typography.Title level={4}>Dish</Typography.Title>
-        <Space style={{ flexDirection: "row", marginTop: 20 }}>
-          {editDish ? (
-            <Button type="primary" danger onClick={handleEditDish}>
-              Done
-            </Button>
-          ) : (
-            <Button type="primary" onClick={handleEditDish}>
-              Edit
-            </Button>
-          )}
-          <Button type="primary" onClick={showModalDish}>
-            Create
-          </Button>
-        </Space>
+        <Button type="primary" onClick={showModalDish}>
+          Create
+        </Button>
       </Layout>
       <Modal
         title="Add new Dish"
@@ -146,42 +133,52 @@ function Menu() {
         <Input style={{ marginBottom: 5 }} placeholder="Discount"></Input>
       </Modal>
 
-      {editDish ? (
-        <Table
-          loading={loading}
-          columns={[
-            {
-              title: "Image",
-              dataIndex: "image",
-              render: (link) => {
-                return <Avatar size={70} src={link} />;
-              },
+      <Table
+        loading={loading}
+        columns={[
+          {
+            title: "Image",
+            dataIndex: "image",
+            render: (link) => {
+              return <Avatar size={70} src={link} />;
             },
-            {
-              title: "Title",
-              dataIndex: "title",
-            },
-            {
-              title: "Price",
-              dataIndex: "price",
-              render: (value) => <span>${value}</span>,
-            },
-            {
-              title: "Description",
-              dataIndex: "description",
-            },
-            {
-              title: "Discount",
-              dataIndex: "discount",
-              render: (value) => <span>{value}%</span>,
-            },
-            {
-              title: "Delete",
-              dataIndex: "id",
-              render: (id) => {
-                return (
-                  <Tooltip>
+          },
+          {
+            title: "Title",
+            dataIndex: "title",
+          },
+          {
+            title: "Price",
+            dataIndex: "price",
+            render: (value) => <span>${value}</span>,
+          },
+          {
+            title: "Description",
+            dataIndex: "description",
+          },
+          {
+            title: "Discount",
+            dataIndex: "discount",
+            render: (value) => <span>{value}%</span>,
+          },
+          {
+            title: "Tools",
+            dataIndex: "id",
+            render: (id) => {
+              return (
+                <>
+                  <Tooltip title="Edit">
                     <Button
+                      style={{ margin: 5 }}
+                      onClick={() => {}}
+                      type="primary"
+                      shape="circle"
+                      icon={<EditOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <Button
+                      style={{ margin: 5 }}
                       onClick={() => removeDish(id)}
                       type="primary"
                       shape="circle"
@@ -189,67 +186,27 @@ function Menu() {
                       icon={<CloseOutlined />}
                     />
                   </Tooltip>
-                );
-              },
+                </>
+              );
             },
-          ]}
-          dataSource={dataDish}
-          pagination={{
-            pageSize: 5,
-          }}
-        ></Table>
-      ) : (
-        <Table
-          loading={loading}
-          columns={[
-            {
-              title: "Image",
-              dataIndex: "image",
-              render: (link) => {
-                return <Avatar size={70} src={link} />;
-              },
-            },
-            {
-              title: "Title",
-              dataIndex: "title",
-            },
-            {
-              title: "Price",
-              dataIndex: "price",
-              render: (value) => <span>${value}</span>,
-            },
-            {
-              title: "Description",
-              dataIndex: "description",
-            },
-            {
-              title: "Discount",
-              dataIndex: "discount",
-              render: (value) => <span>{value}%</span>,
-            },
-          ]}
-          dataSource={dataDish}
-          pagination={{
-            pageSize: 5,
-          }}
-        ></Table>
-      )}
-      <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          },
+        ]}
+        dataSource={dataDish}
+        pagination={{
+          pageSize: 5,
+        }}
+      ></Table>
+      <Layout
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop: 10,
+        }}
+      >
         <Typography.Title level={4}>Drink</Typography.Title>
-        <Space style={{ flexDirection: "row", marginTop: 20 }}>
-          {editDrink ? (
-            <Button type="primary" danger onClick={handleEditDrink}>
-              Done
-            </Button>
-          ) : (
-            <Button type="primary" onClick={handleEditDrink}>
-              Edit
-            </Button>
-          )}
-          <Button type="primary" onClick={showModalDrink}>
-            Create
-          </Button>
-        </Space>
+        <Button type="primary" onClick={showModalDrink}>
+          Create
+        </Button>
       </Layout>
       <Modal
         title="Add new Drink"
@@ -266,94 +223,69 @@ function Menu() {
         <Input style={{ marginBottom: 5 }} placeholder="Description"></Input>
         <Input style={{ marginBottom: 5 }} placeholder="Discount"></Input>
       </Modal>
-      {editDrink ? (
-        <Table
-          loading={loading}
-          columns={[
-            {
-              title: "Image",
-              dataIndex: "image",
-              render: (link) => {
-                return <Avatar size={70} src={link} />;
-              },
+      <Table
+        loading={loading}
+        columns={[
+          {
+            title: "Image",
+            dataIndex: "image",
+            render: (link) => {
+              return <Avatar size={70} src={link} />;
             },
-            {
-              title: "Title",
-              dataIndex: "title",
-            },
-            {
-              title: "Price",
-              dataIndex: "price",
-              render: (value) => <span>${value}</span>,
-            },
-            {
-              title: "Description",
-              dataIndex: "description",
-            },
-            {
-              title: "Discount",
-              dataIndex: "discount",
-              render: (value) => <span>{value}%</span>,
-            },
-            {
-              title: "Delete",
-              dataIndex: "id",
-              render: (id) => {
-                return (
-                  <Tooltip>
+          },
+          {
+            title: "Title",
+            dataIndex: "title",
+          },
+          {
+            title: "Price",
+            dataIndex: "price",
+            render: (value) => <span>${value}</span>,
+          },
+          {
+            title: "Description",
+            dataIndex: "description",
+          },
+          {
+            title: "Discount",
+            dataIndex: "discount",
+            render: (value) => <span>{value}%</span>,
+          },
+          {
+            title: "Tools",
+            dataIndex: "id",
+            render: (id) => {
+              return (
+                <>
+                  <Tooltip title="Edit">
                     <Button
-                      onClick={() => removeDrink(id)}
+                      style={{ margin: 5 }}
+                      onClick={() => {}}
+                      type="primary"
+                      shape="circle"
+                      icon={<EditOutlined />}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <Button
+                      style={{ margin: 5 }}
+                      onClick={() => removeDish(id)}
                       type="primary"
                       shape="circle"
                       danger
                       icon={<CloseOutlined />}
                     />
                   </Tooltip>
-                );
-              },
+                </>
+              );
             },
-          ]}
-          dataSource={dataDrink}
-          pagination={{
-            pageSize: 5,
-          }}
-        ></Table>
-      ) : (
-        <Table
-          loading={loading}
-          columns={[
-            {
-              title: "Image",
-              dataIndex: "image",
-              render: (link) => {
-                return <Avatar size={70} src={link} />;
-              },
-            },
-            {
-              title: "Title",
-              dataIndex: "title",
-            },
-            {
-              title: "Price",
-              dataIndex: "price",
-              render: (value) => <span>${value}</span>,
-            },
-            {
-              title: "Description",
-              dataIndex: "description",
-            },
-            {
-              title: "Discount",
-              dataIndex: "discount",
-              render: (value) => <span>{value}%</span>,
-            },
-          ]}
-          dataSource={dataDrink}
-          pagination={{
-            pageSize: 5,
-          }}
-        ></Table>
-      )}
+          },
+        ]}
+        dataSource={dataDrink}
+        pagination={{
+          pageSize: 5,
+        }}
+      ></Table>
     </Space>
   );
 }

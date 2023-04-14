@@ -1,14 +1,6 @@
-import {
-  Button,
-  Checkbox,
-  Divider,
-  Form,
-  Input,
-  message,
-  Typography,
-} from "antd";
+import { Button, Divider, Form, Input, message, Typography } from "antd";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./index.css";
 import axios from "axios";
 
@@ -30,54 +22,87 @@ const Register = () => {
   const [checked, setChecked] = useState(false);
 
   const handleSignUp = async () => {
-    if (code !== "mindx123") {
-      return messageApi.open({
-        type: "error",
-        content: "Incorrect security code",
-      });
-    } else
-      await axios
-        .post("http://localhost:3001/api/user/sign-up", {
-          Username: nameSignUp,
-          email: emailSignUp,
-          password: passSignUp,
-          confirmPassword: passCfSignUp,
-          phone: phoneSignUp,
-          restaurantID: "empty",
-        })
-        .then(async (res) => {
-          await axios
-            .post("http://localhost:3001/api/profile/create", {
-              restaurantID: res.data.data._id,
-              restaurantName: "empty",
-              restaurantAddress: "empty",
-              restaurantTable: 0,
-              openTime: "empty",
-              closeTime: "empty",
-              restaurantDescribe: "empty",
-            })
-            .then(
-              async (res) =>
-                await axios.put(
-                  `http://localhost:3001/api/user/update-user/${res.data.data.restaurantID}`,
-                  {
-                    restaurantID: res.data.data._id,
-                  }
-                )
-            );
-          messageApi.open({
-            type: "info",
-            content: `${res.data.message}`,
-          });
-          setSignUpShow(false);
-          setlogInShow(true);
-        })
-        .catch((err) => {
+    messageApi.open({
+      type: "loading",
+      content: "Creating a new account..",
+    });
+    await axios
+      .post("http://localhost:3001/api/user/sign-up", {
+        Username: nameSignUp,
+        email: emailSignUp,
+        password: passSignUp,
+        confirmPassword: passCfSignUp,
+        phone: phoneSignUp,
+        code: code,
+        restaurantID: "empty",
+      })
+      .then(async (res) => {
+        if (res.data.status === "ERR") {
           return messageApi.open({
             type: "error",
-            content: `${err.message}`,
+            content: `${res.data.message}`,
           });
+        }
+        await axios
+          .post("http://localhost:3001/api/table/create/", {
+            restaurantID: res.data.data._id,
+          })
+          .then((res) => {
+            if (res.data.status === "ERR") {
+              return messageApi.open({
+                type: "error",
+                content: `${res.data.message}`,
+              });
+            }
+          });
+        await axios
+          .post("http://localhost:3001/api/profile/create", {
+            restaurantID: res.data.data._id,
+            restaurantName: "empty",
+            restaurantAddress: "empty",
+            restaurantTable: 0,
+            shiftTime: [
+              { shift: 1, timeStart: "empty", timeEnd: "empty" },
+              { shift: 2, timeStart: "empty", timeEnd: "empty" },
+              { shift: 3, timeStart: "empty", timeEnd: "empty" },
+            ],
+            restaurantDescribe: "empty",
+          })
+          .then(async (res) => {
+            if (res.data.status === "ERR") {
+              return messageApi.open({
+                type: "error",
+                content: `${res.data.message}`,
+              });
+            }
+            await axios
+              .put(
+                `http://localhost:3001/api/user/update-user/${res.data.data.restaurantID}`,
+                {
+                  restaurantID: res.data.data._id,
+                }
+              )
+              .then((res) => {
+                return messageApi.open({
+                  type: "success",
+                  content: `${res.data.message}`,
+                  duration: 1,
+                });
+              });
+          });
+        messageApi.open({
+          type: "info",
+          content: `${res.data.message}`,
         });
+        setSignUpShow(false);
+        setlogInShow(true);
+      })
+      .catch((err) => {
+        return messageApi.open({
+          type: "error",
+          content: `${err.message}`,
+        });
+      });
   };
 
   const handleLogIn = async () => {

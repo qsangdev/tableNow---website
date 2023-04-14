@@ -44,18 +44,6 @@ const Register = () => {
           });
         }
         await axios
-          .post("http://localhost:3001/api/table/create/", {
-            restaurantID: res.data.data._id,
-          })
-          .then((res) => {
-            if (res.data.status === "ERR") {
-              return messageApi.open({
-                type: "error",
-                content: `${res.data.message}`,
-              });
-            }
-          });
-        await axios
           .post("http://localhost:3001/api/profile/create", {
             restaurantID: res.data.data._id,
             restaurantName: "empty",
@@ -82,7 +70,19 @@ const Register = () => {
                   restaurantID: res.data.data._id,
                 }
               )
-              .then((res) => {
+              .then(async (res) => {
+                await axios
+                  .post("http://localhost:3001/api/table/create/", {
+                    restaurantID: res.data.data._id,
+                  })
+                  .then((res) => {
+                    if (res.data.status === "ERR") {
+                      return messageApi.open({
+                        type: "error",
+                        content: `${res.data.message}`,
+                      });
+                    }
+                  });
                 return messageApi.open({
                   type: "success",
                   content: `${res.data.message}`,
@@ -122,12 +122,14 @@ const Register = () => {
             .get(
               `http://localhost:3001/api/profile/get-details/${res.data.resID}`
             )
-            .then((res) => localStorage.setItem("_id", res.data.data._id));
-          localStorage.setItem("access_token", res.data.access_token);
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${res.data.access_token}`;
-          window.location.reload();
+            .then((res) => {
+              localStorage.setItem("_id", res.data.data._id);
+              localStorage.setItem("access_token", res.data.access_token);
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${res.data.access_token}`;
+              window.location.reload();
+            });
         }
       })
       .catch((err) => {

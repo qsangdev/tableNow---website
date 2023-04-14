@@ -1,7 +1,5 @@
 import {
-  CheckCircleOutlined,
   CloseOutlined,
-  EditOutlined,
   ExclamationCircleFilled,
   UploadOutlined,
 } from "@ant-design/icons/lib/icons";
@@ -26,7 +24,6 @@ import {
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { getReservation } from "../../API";
 
 const Profile = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -146,7 +143,7 @@ const Profile = () => {
       );
     } else if (
       id === 2 &&
-      moment(time.startTime).format("HH:mm") < dataTimes[id - 1].timeEnd
+      moment(time.openTime).format("HH:mm") < dataTimes[id - 1].timeEnd
     ) {
       return message.warning(
         "Start time could not before the end of the shift before!",
@@ -225,12 +222,9 @@ const Profile = () => {
     });
     tables && allTables !== []
       ? await axios
-          .put(
-            `http://localhost:3001/api/table/update/${dataSource.restaurantID}`,
-            {
-              tables: allTables,
-            }
-          )
+          .put(`http://localhost:3001/api/table/update/${dataSource._id}`, {
+            tables: allTables,
+          })
           .then(async (res) => {
             if (res.data.status === "ERR") {
               return message.error(res.data.message, 2.5);

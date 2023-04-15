@@ -41,6 +41,11 @@ const Profile = () => {
   const [dataSource, setDataSource] = useState([]);
   const [dataTimes, setDataTimes] = useState([]);
 
+  const [dataTables, setDataTables] = useState([]);
+  const [editTable, setEditTable] = useState(false);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
+
   const [disabledTables, setDisabledTables] = useState(true);
   const [tables, setTables] = useState("");
   const [allTables, setAllTables] = useState([]);
@@ -65,6 +70,10 @@ const Profile = () => {
 
   const handleEditTables = () => {
     setDisabledTables(false);
+  };
+
+  const handleEditTable = (id) => {
+    setEditTable(id);
   };
 
   useEffect(() => {
@@ -196,16 +205,22 @@ const Profile = () => {
         {
           shift: 1,
           name: "Table " + (i + 1),
+          minPeople: 0,
+          maxPeople: 0,
           status: "available",
         },
         {
           shift: 2,
           name: "Table " + (i + 1),
+          minPeople: 0,
+          maxPeople: 0,
           status: "available",
         },
         {
           shift: 3,
           name: "Table " + (i + 1),
+          minPeople: 0,
+          maxPeople: 0,
           status: "available",
         },
       ];
@@ -222,9 +237,12 @@ const Profile = () => {
     });
     tables && allTables !== []
       ? await axios
-          .put(`http://localhost:3001/api/table/update/${dataSource._id}`, {
-            tables: allTables,
-          })
+          .put(
+            `http://localhost:3001/api/table/update/${dataSource.restaurantID}`,
+            {
+              tables: allTables,
+            }
+          )
           .then(async (res) => {
             if (res.data.status === "ERR") {
               return message.error(res.data.message, 2.5);
@@ -264,9 +282,36 @@ const Profile = () => {
         });
   };
 
+  const getDataTables = async () => {
+    setLoading(true);
+    dataSource !== [] && dataSource
+      ? await axios
+          .get(
+            `http://localhost:3001/api/table/get-details/${dataSource.restaurantID}`
+          )
+          .then((res) => {
+            if (res.data.status === "ERR") {
+              return message.error(res.data.message, 2.5);
+            } else {
+              setLoading(false);
+              setDataTables(
+                res.data.data.tables.filter((e) => e.shift % 2 === 0)
+              );
+            }
+          })
+      : messageApi.open({
+          type: "loading",
+          content: "Loading..",
+        });
+  };
+
   useEffect(() => {
     getDataDashboard();
   }, [resID]);
+
+  useEffect(() => {
+    getDataTables();
+  }, [dataSource]);
 
   const handleUpload = (e) => {
     if (!(e.event instanceof ProgressEvent)) return;
@@ -286,6 +331,74 @@ const Profile = () => {
         message.success("Uploading finished", 2.5);
         getDataDashboard();
       });
+  };
+
+  const handleDeleteTable = (name) => {
+    confirm({
+      title: "Do you want to delete this table?",
+      icon: <ExclamationCircleFilled />,
+      onOk: async () => {
+        await axios
+          .post(
+            `http://localhost:3001/api/table/delete/${dataSource.restaurantID}`,
+            {
+              tables: [
+                {
+                  name: name,
+                },
+              ],
+            }
+          )
+          .then(async (res) => {
+            await axios
+              .put(`http://localhost:3001/api/profile/update/${resID}`, {
+                restaurantTable: dataSource.restaurantTable - 1,
+              })
+              .then(() => getDataDashboard());
+            if (res.data.status === "OK") {
+              message.success(res.data.message, 2.5);
+              getDataTables();
+            } else {
+              message.error(res.data.message, 2.5);
+            }
+          })
+          .catch((res) => {
+            message.error(res.data.message, 2.5);
+          });
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+
+  const handleSaveTable = async (name) => {
+    if (min > max) {
+      return message.warning("Min can't be bigger than Max, you know?", 2.5);
+    } else {
+      await axios
+        .post(
+          `http://localhost:3001/api/table/update-minmax/${dataSource.restaurantID}`,
+          {
+            tables: [
+              {
+                name: name,
+                minPeople: min,
+                maxPeople: max,
+              },
+            ],
+          }
+        )
+        .then((res) => {
+          if (res.data.status === "OK") {
+            message.success(res.data.message, 2.5);
+            getDataTables();
+            setEditTable(false);
+          } else {
+            message.error(res.data.message, 2.5);
+          }
+        });
+    }
   };
 
   return (
@@ -430,6 +543,94 @@ const Profile = () => {
                 </Button>
               )}
             </Space>
+          </Card>
+          <Card
+            title="Tables"
+            size="small"
+            loading={loading}
+            style={{ marginTop: 10, maxWidth: "750px" }}
+          >
+            <List
+              grid={{
+                gutter: 10,
+                xs: 0,
+                sm: 3,
+                md: 4,
+                lg: 4,
+                xl: 5,
+                xxl: 5,
+              }}
+              dataSource={dataTables}
+              renderItem={(item) => (
+                <List.Item>
+                  <Card title={item.name} style={{ textAlign: "center" }}>
+                    <Tooltip title="delete">
+                      <Button
+                        onClick={() => handleDeleteTable(item.name)}
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          top: 0,
+                        }}
+                        type="primary"
+                        shape="circle"
+                        danger
+                        icon={<CloseOutlined />}
+                      />
+                    </Tooltip>
+                    {editTable === item._id ? (
+                      <>
+                        <p>
+                          Min People:{" "}
+                          <InputNumber
+                            min={1}
+                            max={15}
+                            size="small"
+                            defaultValue={item.minPeople}
+                            disabled={editTable !== item._id}
+                            onChange={(e) => setMin(e)}
+                          />
+                        </p>
+                        <p>
+                          Max People:{" "}
+                          <InputNumber
+                            min={1}
+                            max={15}
+                            size="small"
+                            defaultValue={item.maxPeople}
+                            disabled={editTable !== item._id}
+                            onChange={(e) => setMax(e)}
+                          />
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p>Min People: {item.minPeople}</p>
+                        <p>Max People: {item.maxPeople}</p>
+                      </>
+                    )}
+                    {editTable === item._id ? (
+                      <Button
+                        type="primary"
+                        danger
+                        style={{ marginTop: 15 }}
+                        onClick={() => handleSaveTable(item.name)}
+                      >
+                        Done
+                      </Button>
+                    ) : (
+                      <Button
+                        type="primary"
+                        style={{ marginTop: 15 }}
+                        onClick={() => handleEditTable(item._id)}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </Card>
+                </List.Item>
+              )}
+            />
           </Card>
           <Card
             title="Shift Time"

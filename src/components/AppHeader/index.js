@@ -12,7 +12,7 @@ function AppHeader() {
       content: "Unsaved changes cannot be undone!",
       onOk() {
         localStorage.removeItem("access_token");
-        localStorage.removeItem("_id");
+        localStorage.removeItem("resID");
         window.location.reload();
       },
       onCancel() {

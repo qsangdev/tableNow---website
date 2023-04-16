@@ -34,7 +34,6 @@ const Register = () => {
         confirmPassword: passCfSignUp,
         phone: phoneSignUp,
         code: code,
-        restaurantID: "empty",
       })
       .then(async (res) => {
         if (res.data.status === "ERR") {
@@ -64,32 +63,24 @@ const Register = () => {
               });
             }
             await axios
-              .put(
-                `http://localhost:3001/api/user/update-user/${res.data.data.restaurantID}`,
-                {
-                  restaurantID: res.data.data._id,
-                }
-              )
-              .then(async (res) => {
-                await axios
-                  .post("http://localhost:3001/api/table/create/", {
-                    restaurantID: res.data.data._id,
-                  })
-                  .then((res) => {
-                    if (res.data.status === "ERR") {
-                      return messageApi.open({
-                        type: "error",
-                        content: `${res.data.message}`,
-                      });
-                    }
+              .post("http://localhost:3001/api/table/create/", {
+                restaurantID: res.data.data.restaurantID,
+              })
+              .then((res) => {
+                if (res.data.status === "ERR") {
+                  return messageApi.open({
+                    type: "error",
+                    content: `${res.data.message}`,
                   });
-                return messageApi.open({
-                  type: "success",
-                  content: `${res.data.message}`,
-                  duration: 1,
-                });
+                }
               });
+            return messageApi.open({
+              type: "success",
+              content: `${res.data.message}`,
+              duration: 1,
+            });
           });
+
         messageApi.open({
           type: "info",
           content: `${res.data.message}`,
@@ -118,16 +109,14 @@ const Register = () => {
             content: `${res.data.message}`,
           });
         } else {
+          localStorage.setItem("resID", res.data.id);
+          localStorage.setItem("access_token", res.data.access_token);
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res.data.access_token}`;
           await axios
-            .get(
-              `http://localhost:3001/api/profile/get-details/${res.data.resID}`
-            )
-            .then((res) => {
-              localStorage.setItem("_id", res.data.data._id);
-              localStorage.setItem("access_token", res.data.access_token);
-              axios.defaults.headers.common[
-                "Authorization"
-              ] = `Bearer ${res.data.access_token}`;
+            .get(`http://localhost:3001/api/profile/get-details/${res.data.id}`)
+            .then(() => {
               window.location.reload();
             });
         }

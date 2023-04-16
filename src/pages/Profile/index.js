@@ -77,7 +77,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    setResID(localStorage.getItem("_id"));
+    setResID(localStorage.getItem("resID"));
   }, []);
 
   const showConfirm = (e) => {
@@ -86,9 +86,12 @@ const Profile = () => {
       icon: <ExclamationCircleFilled />,
       onOk: async () => {
         await axios
-          .post(`http://localhost:3001/api/profile/delete-image/${resID}`, {
-            images: e,
-          })
+          .post(
+            `http://localhost:3001/api/profile/delete-image/${resID}`,
+            {
+              images: e,
+            }
+          )
           .then((res) => {
             if (res.data.status === "OK") {
               message.success(res.data.message, 2.5);
@@ -110,7 +113,7 @@ const Profile = () => {
   const handleSaveName = async () => {
     name
       ? await axios
-          .put(`http://localhost:3001/api/profile/update/${resID}`, {
+          .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
             restaurantName: name,
           })
           .then((res) => {
@@ -161,15 +164,18 @@ const Profile = () => {
     } else {
       return time
         ? await axios
-            .post(`http://localhost:3001/api/profile/update-time/${resID}`, {
-              shiftTime: [
-                {
-                  shift: id + 1,
-                  timeStart: moment(time.openTime).format("HH:mm"),
-                  timeEnd: moment(time.closeTime).format("HH:mm"),
-                },
-              ],
-            })
+            .post(
+              `http://localhost:3001/api/profile/update-time/${dataSource._id}`,
+              {
+                shiftTime: [
+                  {
+                    shift: id + 1,
+                    timeStart: moment(time.openTime).format("HH:mm"),
+                    timeEnd: moment(time.closeTime).format("HH:mm"),
+                  },
+                ],
+              }
+            )
             .then(() => {
               getDataDashboard();
               setDisabledTimesId(disabledTimesId === id);
@@ -181,7 +187,7 @@ const Profile = () => {
   const handleSaveAddress = async () => {
     address
       ? await axios
-          .put(`http://localhost:3001/api/profile/update/${resID}`, {
+          .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
             restaurantAddress: address,
           })
           .then(setDisabledAddress(true))
@@ -191,7 +197,7 @@ const Profile = () => {
   const handleSaveDes = async () => {
     description
       ? await axios
-          .put(`http://localhost:3001/api/profile/update/${resID}`, {
+          .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
             restaurantDescribe: description,
           })
           .then(setDisabledDes(true))
@@ -237,18 +243,16 @@ const Profile = () => {
     });
     tables && allTables !== []
       ? await axios
-          .put(
-            `http://localhost:3001/api/table/update/${dataSource.restaurantID}`,
-            {
-              tables: allTables,
-            }
-          )
+          .put(`http://localhost:3001/api/table/update/${resID}`, {
+            tables: allTables,
+          })
           .then(async (res) => {
+            getDataTables();
             if (res.data.status === "ERR") {
               return message.error(res.data.message, 2.5);
             } else {
               await axios.put(
-                `http://localhost:3001/api/profile/update/${resID}`,
+                `http://localhost:3001/api/profile/update/${dataSource._id}`,
                 {
                   restaurantTable: tables,
                 }
@@ -278,17 +282,15 @@ const Profile = () => {
           .catch((err) => console.log(err))
       : messageApi.open({
           type: "loading",
-          content: "Loading..",
+          content: "Loading Profile..",
         });
   };
 
   const getDataTables = async () => {
     setLoading(true);
-    dataSource !== [] && dataSource
+    resID
       ? await axios
-          .get(
-            `http://localhost:3001/api/table/get-details/${dataSource.restaurantID}`
-          )
+          .get(`http://localhost:3001/api/table/get-details/${resID}`)
           .then((res) => {
             if (res.data.status === "ERR") {
               return message.error(res.data.message, 2.5);
@@ -301,7 +303,7 @@ const Profile = () => {
           })
       : messageApi.open({
           type: "loading",
-          content: "Loading..",
+          content: "Loading Tables..",
         });
   };
 
@@ -311,7 +313,7 @@ const Profile = () => {
 
   useEffect(() => {
     getDataTables();
-  }, [dataSource]);
+  }, [resID]);
 
   const handleUpload = (e) => {
     if (!(e.event instanceof ProgressEvent)) return;
@@ -339,21 +341,21 @@ const Profile = () => {
       icon: <ExclamationCircleFilled />,
       onOk: async () => {
         await axios
-          .post(
-            `http://localhost:3001/api/table/delete/${dataSource.restaurantID}`,
-            {
-              tables: [
-                {
-                  name: name,
-                },
-              ],
-            }
-          )
+          .post(`http://localhost:3001/api/table/delete/${resID}`, {
+            tables: [
+              {
+                name: name,
+              },
+            ],
+          })
           .then(async (res) => {
             await axios
-              .put(`http://localhost:3001/api/profile/update/${resID}`, {
-                restaurantTable: dataSource.restaurantTable - 1,
-              })
+              .put(
+                `http://localhost:3001/api/profile/update/${dataSource._id}`,
+                {
+                  restaurantTable: dataSource.restaurantTable - 1,
+                }
+              )
               .then(() => getDataDashboard());
             if (res.data.status === "OK") {
               message.success(res.data.message, 2.5);
@@ -377,18 +379,15 @@ const Profile = () => {
       return message.warning("Min can't be bigger than Max, you know?", 2.5);
     } else {
       await axios
-        .post(
-          `http://localhost:3001/api/table/update-minmax/${dataSource.restaurantID}`,
-          {
-            tables: [
-              {
-                name: name,
-                minPeople: min,
-                maxPeople: max,
-              },
-            ],
-          }
-        )
+        .post(`http://localhost:3001/api/table/update-minmax/${resID}`, {
+          tables: [
+            {
+              name: name,
+              minPeople: min,
+              maxPeople: max,
+            },
+          ],
+        })
         .then((res) => {
           if (res.data.status === "OK") {
             message.success(res.data.message, 2.5);

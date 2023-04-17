@@ -86,12 +86,9 @@ const Profile = () => {
       icon: <ExclamationCircleFilled />,
       onOk: async () => {
         await axios
-          .post(
-            `http://localhost:3001/api/profile/delete-image/${resID}`,
-            {
-              images: e,
-            }
-          )
+          .post(`http://localhost:3001/api/profile/delete-image/${resID}`, {
+            images: e,
+          })
           .then((res) => {
             if (res.data.status === "OK") {
               message.success(res.data.message, 2.5);
@@ -280,10 +277,7 @@ const Profile = () => {
             }
           })
           .catch((err) => console.log(err))
-      : messageApi.open({
-          type: "loading",
-          content: "Loading Profile..",
-        });
+      : setLoading(true);
   };
 
   const getDataTables = async () => {
@@ -301,10 +295,7 @@ const Profile = () => {
               );
             }
           })
-      : messageApi.open({
-          type: "loading",
-          content: "Loading Tables..",
-        });
+      : setLoading(true);
   };
 
   useEffect(() => {

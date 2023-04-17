@@ -220,10 +220,7 @@ function Menu() {
               return setLoading(false);
             } else console.log(err);
           })
-      : messageApi.open({
-          type: "loading",
-          content: "Loading Dish..",
-        });
+      : setLoading(true);
   };
 
   useEffect(() => {
@@ -483,7 +480,7 @@ function Menu() {
                 dataIndex: "_id",
                 render: (id) => {
                   return (
-                    <>
+                    <div key={id}>
                       <Tooltip title="Edit">
                         <Button
                           style={{ margin: 5 }}
@@ -521,7 +518,7 @@ function Menu() {
                           />
                         </Upload>
                       </Tooltip>
-                    </>
+                    </div>
                   );
                 },
               },

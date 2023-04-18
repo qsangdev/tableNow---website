@@ -21,6 +21,7 @@ import {
   Upload,
   message,
 } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -43,8 +44,8 @@ const Profile = () => {
 
   const [dataTables, setDataTables] = useState([]);
   const [editTable, setEditTable] = useState(false);
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(0);
+  const [min, setMin] = useState(1);
+  const [max, setMax] = useState(4);
 
   const [disabledTables, setDisabledTables] = useState(true);
   const [tables, setTables] = useState("");
@@ -208,22 +209,22 @@ const Profile = () => {
         {
           shift: 1,
           name: "Table " + (i + 1),
-          minPeople: 0,
-          maxPeople: 0,
+          minPeople: 1,
+          maxPeople: 4,
           status: "available",
         },
         {
           shift: 2,
           name: "Table " + (i + 1),
-          minPeople: 0,
-          maxPeople: 0,
+          minPeople: 1,
+          maxPeople: 4,
           status: "available",
         },
         {
           shift: 3,
           name: "Table " + (i + 1),
-          minPeople: 0,
-          maxPeople: 0,
+          minPeople: 1,
+          maxPeople: 4,
           status: "available",
         },
       ];
@@ -384,6 +385,8 @@ const Profile = () => {
             message.success(res.data.message, 2.5);
             getDataTables();
             setEditTable(false);
+            setMax("");
+            setMin("");
           } else {
             message.error(res.data.message, 2.5);
           }
@@ -466,8 +469,9 @@ const Profile = () => {
             loading={loading}
             style={{ marginTop: 10 }}
           >
-            <Input
-              style={{ width: "600px", marginRight: 10, height: "39px" }}
+            <TextArea
+              rows={4}
+              style={{ width: "600px", marginRight: 10 }}
               placeholder={dataSource.restaurantDescribe}
               disabled={disabledDes}
               onChange={(e) => setDescription(e.target.value)}
@@ -492,7 +496,7 @@ const Profile = () => {
             )}
           </Card>
           <Card
-            title="Number of Tables"
+            title="Number of Tables (Minimum 4 tables)"
             size="small"
             loading={loading}
             style={{ marginTop: 10 }}
@@ -689,6 +693,7 @@ const Profile = () => {
         </Layout>
 
         <Typography.Title level={3}>Images</Typography.Title>
+        <Typography.Text level={3}>(Minimum 4 images)</Typography.Text>
         <Layout style={{ flexDirection: "row" }}>
           <Upload
             key="upload-image"

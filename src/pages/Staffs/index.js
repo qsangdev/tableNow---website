@@ -214,7 +214,7 @@ function Staffs() {
             marginTop: 10,
           }}
         >
-          <Typography.Title level={4}>Staffs</Typography.Title>
+          <Typography.Title level={4}>Staffs (Minimum 3 staffs)</Typography.Title>
           <Button type="primary" onClick={showModalStaff}>
             Create
           </Button>

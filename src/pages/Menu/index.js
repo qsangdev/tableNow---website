@@ -31,7 +31,7 @@ function Menu() {
   const [isModalDrink, setIsModalDrink] = useState(false);
   const [isModalEdit, setIsModalEdit] = useState(false);
 
-  const [id, setId] = useState(0);
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [des, setDes] = useState("");
   const [price, setPrice] = useState("");
@@ -112,7 +112,24 @@ function Menu() {
         dishPrice: price,
         dishDiscount: discount,
       })
-      .then((res) => {
+      .then(async (res) => {
+        await axios
+          .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+          .then(async (res) => {
+            setId(res.data.data._id);
+            await axios
+              .get(`http://localhost:3001/api/dish/get/${resID}`)
+              .then(async (res) => {
+                await axios.put(
+                  `http://localhost:3001/api/profile/update/${id}`,
+                  {
+                    maxDiscount: Math.max(
+                      ...res.data.data.map((e) => e.dishDiscount)
+                    ),
+                  }
+                );
+              });
+          });
         if (res.data.status === "ERR") {
           return message.error(res.data.message, 2.5);
         } else {
@@ -123,6 +140,7 @@ function Menu() {
           setPrice("");
           setDes("");
           setDiscount("");
+          setId("");
         }
       })
       .catch((err) => {
@@ -264,7 +282,9 @@ function Menu() {
               marginTop: 10,
             }}
           >
-            <Typography.Title level={4}>Dish</Typography.Title>
+            <Typography.Title level={4}>
+              Dish (Minimum 5 dishes)
+            </Typography.Title>
             <Button type="primary" onClick={showModalDish}>
               Create
             </Button>
@@ -401,7 +421,9 @@ function Menu() {
               marginTop: 10,
             }}
           >
-            <Typography.Title level={4}>Drink</Typography.Title>
+            <Typography.Title level={4}>
+              Drink (Minimum 5 drinks)
+            </Typography.Title>
             <Button type="primary" onClick={showModalDrink}>
               Create
             </Button>

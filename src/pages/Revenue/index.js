@@ -114,7 +114,7 @@ function Orders() {
         </Space>
       )}
 
-      <Typography.Text>Recent Orders</Typography.Text>
+      <Typography.Title level={5}>Bills</Typography.Title>
       <RecentOrders />
       <DashboardChart />
     </Space>

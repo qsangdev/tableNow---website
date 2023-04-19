@@ -76,8 +76,8 @@ function SideMenu() {
         .get(`http://localhost:3001/api/dish/get/${resID}`)
         .then((res) => {
           if (
-            res.data.data.filter((e) => e.dishType === "Dish").length < 5 ||
-            res.data.data.filter((e) => e.dishType === "Drink").length < 5
+            res.data.data.filter((e) => e.dishType === "Dish").length < 3 ||
+            res.data.data.filter((e) => e.dishType === "Drink").length < 3
           ) {
             return setDataMenu(false);
           } else {
@@ -201,7 +201,7 @@ function SideMenu() {
           backgroundColor: "white",
           marginRight: 1,
           padding: 20,
-          height: "100vh",
+          height: "270vh",
           width: "199px",
         }}
       >

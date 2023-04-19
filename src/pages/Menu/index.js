@@ -175,7 +175,25 @@ function Menu() {
         dishPrice: price,
         dishDiscount: discount,
       })
-      .then((res) => {
+      .then(async (res) => {
+        await axios
+          .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+          .then(async (res) => {
+            setId(res.data.data._id);
+            console.log(id);
+            await axios
+              .get(`http://localhost:3001/api/dish/get/${resID}`)
+              .then(async (res) => {
+                await axios.put(
+                  `http://localhost:3001/api/profile/update/${id}`,
+                  {
+                    maxDiscount: Math.max(
+                      ...res.data.data.map((e) => e.dishDiscount)
+                    ),
+                  }
+                );
+              });
+          });
         if (res.data.status === "ERR") {
           return message.error(res.data.message, 2.5);
         } else {
@@ -186,6 +204,7 @@ function Menu() {
           setPrice("");
           setDes("");
           setDiscount("");
+          setId("");
         }
       })
       .catch((err) => {
@@ -194,7 +213,9 @@ function Menu() {
             "You know where to enter letters and where to enter numbers, right?",
             2.5
           );
-        } else console.log(err);
+        } else if (err.code === "ERR_BAD_REQUEST") {
+          return message.error("Network error, please try again..", 2.5);
+        }
       });
   };
 

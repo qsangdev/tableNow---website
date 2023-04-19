@@ -7,7 +7,3 @@ export const getBills = () => {
 export const getReservation = () => {
   return axios.get("http://localhost:3000/shift");
 };
-
-export const getRating = () => {
-  return axios.get("http://localhost:3000/rate");
-};

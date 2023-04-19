@@ -1,27 +1,36 @@
 import { StarFilled } from "@ant-design/icons";
-import { Card, Layout, List, Space, Typography } from "antd";
+import { Card, Divider, List, Space, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { getRating } from "../../API";
+import axios from "axios";
+import moment from "moment/moment";
 
 const Ratings = () => {
   const [loading, setLoading] = useState(false);
-  const [rating, setRating] = useState([]);
+  const [dataRating, setDataRating] = useState([]);
 
-  const loadData = async () => {
+  const [resID, setResID] = useState("");
+
+  useEffect(() => {
+    setResID(localStorage.getItem("resID"));
+  }, []);
+
+  const getDataRating = async () => {
     try {
       setLoading(true);
-      await getRating().then((res) => {
-        setRating(res.data);
-        setLoading(false);
-      });
+      await axios
+        .get(`http://localhost:3001/api/rating/get-details/${resID}`)
+        .then((res) => {
+          setDataRating(res.data.data);
+          setLoading(false);
+        });
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    getDataRating();
+  }, [resID]);
 
   return (
     <Space direction="vertical">
@@ -36,60 +45,30 @@ const Ratings = () => {
           xxl: 4,
         }}
         loading={loading}
-        dataSource={rating}
+        dataSource={dataRating.sort(
+          (a, b) => moment(b.createdAt) - moment(a.createdAt)
+        )}
         renderItem={(e) => {
           return (
             <Card
               size="small"
-              title={e.name}
-              key={e.id}
+              title={e.ratingName}
+              key={e._id}
               style={{ margin: 10, width: "200px", height: "180px" }}
             >
-              <p
-                style={{
-                  backgroundColor: "#F5F5F5",
-                  textAlign: "center",
-                  fontSize: 20,
-                  borderRadius: 10,
-                }}
-              >
-                {e.star === 5 && (
-                  <>
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                  </>
-                )}
-                {e.star === 4 && (
-                  <>
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                  </>
-                )}
-                {e.star === 3 && (
-                  <>
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                  </>
-                )}
-                {e.star === 2 && (
-                  <>
-                    <StarFilled style={{ color: "#FFD700" }} />
-                    <StarFilled style={{ color: "#FFD700" }} />
-                  </>
-                )}
-                {e.star === 1 && (
-                  <>
-                    <StarFilled style={{ color: "#FFD700" }} />
-                  </>
-                )}
-              </p>
-              <p>{e.comment}</p>
+              <Divider>
+                <p>"{e.ratingComment}"</p>
+
+                {[...Array(e.ratingStar)].map((e, i) => {
+                  return (
+                    <StarFilled
+                      style={{ color: "gold", marginTop: 10, marginBottom: 10 }}
+                    />
+                  );
+                })}
+
+                <p>{moment(e.createdAt).format("HH:mm DD/MM/YYYY")}</p>
+              </Divider>
             </Card>
           );
         }}

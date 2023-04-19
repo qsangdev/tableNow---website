@@ -2,6 +2,7 @@ import {
   CloseOutlined,
   ExclamationCircleFilled,
   UploadOutlined,
+  EnvironmentFilled,
 } from "@ant-design/icons/lib/icons";
 import {
   Button,
@@ -25,6 +26,8 @@ import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
+import GoogleMapReact from "google-map-react";
+import { getLatLng, geocodeByAddress } from "react-google-places-autocomplete";
 
 const Profile = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -50,6 +53,8 @@ const Profile = () => {
   const [disabledTables, setDisabledTables] = useState(true);
   const [tables, setTables] = useState("");
   const [allTables, setAllTables] = useState([]);
+
+  const [coords, setCoords] = useState(null);
 
   const { confirm } = Modal;
 
@@ -188,7 +193,10 @@ const Profile = () => {
           .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
             restaurantAddress: address,
           })
-          .then(setDisabledAddress(true))
+          .then(() => {
+            getDataDashboard();
+            setDisabledAddress(true);
+          })
       : setDisabledAddress(true);
   };
 
@@ -306,6 +314,31 @@ const Profile = () => {
   useEffect(() => {
     getDataTables();
   }, [resID]);
+
+  const Position = ({ text }) => <div>{text}</div>;
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords: { longitude, latitude } }) => {
+        setCoords({ lat: latitude, lng: longitude });
+      }
+    );
+
+    const getCoords = async () => {
+      const results = await geocodeByAddress(dataSource?.restaurantAddress);
+      const latlong = await getLatLng(results[0]);
+      setCoords(latlong);
+      await axios.put(
+        `http://localhost:3001/api/profile/update/${dataSource._id}`,
+        {
+          latitude: latlong.lat,
+          longitude: latlong.lng,
+        }
+      );
+    };
+
+    dataSource && getCoords();
+  }, [dataSource]);
 
   const handleUpload = (e) => {
     if (!(e.event instanceof ProgressEvent)) return;
@@ -462,6 +495,22 @@ const Profile = () => {
                 Edit
               </Button>
             )}
+            <div style={{ height: "300px", width: "100%", marginTop: 10 }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: process.env.REACT_APP_API_MAP }}
+                defaultCenter={coords}
+                defaultZoom={11}
+                center={coords}
+              >
+                <Position
+                  lat={coords?.lat}
+                  lng={coords?.lng}
+                  text={
+                    <EnvironmentFilled style={{ color: "red", fontSize: 20 }} />
+                  }
+                />
+              </GoogleMapReact>
+            </div>
           </Card>
           <Card
             title="Description"
@@ -471,7 +520,7 @@ const Profile = () => {
           >
             <TextArea
               rows={4}
-              style={{ width: "600px", marginRight: 10 }}
+              style={{ width: "608px", marginRight: 10 }}
               placeholder={dataSource.restaurantDescribe}
               disabled={disabledDes}
               onChange={(e) => setDescription(e.target.value)}

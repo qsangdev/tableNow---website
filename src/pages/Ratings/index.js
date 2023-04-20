@@ -54,21 +54,22 @@ const Ratings = () => {
               size="small"
               title={e.ratingName}
               key={e._id}
-              style={{ margin: 10, width: "200px", height: "180px" }}
+              style={{ margin: 50, width: "200px", height: "180px" }}
             >
-              <Divider>
+              <div>
                 <p>"{e.ratingComment}"</p>
 
                 {[...Array(e.ratingStar)].map((e, i) => {
                   return (
                     <StarFilled
+                      key={i}
                       style={{ color: "gold", marginTop: 10, marginBottom: 10 }}
                     />
                   );
                 })}
 
                 <p>{moment(e.createdAt).format("HH:mm DD/MM/YYYY")}</p>
-              </Divider>
+              </div>
             </Card>
           );
         }}

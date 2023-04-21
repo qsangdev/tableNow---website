@@ -114,16 +114,18 @@ function SideMenu() {
       dataStaffs === true &&
       dataTables === true
     ) {
-      await axios
+      return await axios
         .put(`http://localhost:3001/api/profile/update/${id}`, {
           active: true,
         })
+        .then((res) => console.log(res))
         .catch((err) => console.log(err));
     } else {
       await axios
         .put(`http://localhost:3001/api/profile/update/${id}`, {
           active: false,
         })
+        .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
   };

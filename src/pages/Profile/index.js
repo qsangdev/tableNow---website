@@ -328,13 +328,12 @@ const Profile = () => {
       const results = await geocodeByAddress(dataSource?.restaurantAddress);
       const latlong = await getLatLng(results[0]);
       setCoords(latlong);
-      await axios.put(
-        `http://localhost:3001/api/profile/update/${dataSource._id}`,
-        {
+      await axios
+        .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
           latitude: latlong.lat,
           longitude: latlong.lng,
-        }
-      );
+        })
+        .then((res) => console.log(res));
     };
 
     dataSource && getCoords();

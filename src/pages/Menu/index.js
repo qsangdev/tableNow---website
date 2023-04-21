@@ -37,6 +37,7 @@ function Menu() {
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
 
+  const [profileID, setProfileID] = useState("");
   const [resID, setResID] = useState("");
   useEffect(() => {
     setResID(localStorage.getItem("resID"));
@@ -60,8 +61,22 @@ function Menu() {
         setPrice(res.data.data[0].dishPrice);
         setDes(res.data.data[0].dishDescribe);
         setDiscount(res.data.data[0].dishDiscount);
+        setId("");
       });
   };
+
+  const getIdProfile = async () => {
+    resID &&
+      (await axios
+        .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+        .then((res) => {
+          setProfileID(res.data.data._id);
+        }));
+  };
+
+  useEffect(() => {
+    getIdProfile();
+  }, [resID]);
 
   const handleOkEdit = async (id) => {
     messageApi.open({
@@ -114,22 +129,19 @@ function Menu() {
       })
       .then(async (res) => {
         await axios
-          .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+          .get(`http://localhost:3001/api/dish/get/${resID}`)
           .then(async (res) => {
-            setId(res.data.data._id);
-            await axios
-              .get(`http://localhost:3001/api/dish/get/${resID}`)
-              .then(async (res) => {
-                await axios.put(
-                  `http://localhost:3001/api/profile/update/${id}`,
-                  {
-                    maxDiscount: Math.max(
-                      ...res.data.data.map((e) => e.dishDiscount)
-                    ),
-                  }
-                );
-              });
+            profileID !== "" &&
+              (await axios.put(
+                `http://localhost:3001/api/profile/update/${profileID}`,
+                {
+                  maxDiscount: Math.max(
+                    ...res.data.data.map((e) => e.dishDiscount)
+                  ),
+                }
+              ));
           });
+
         if (res.data.status === "ERR") {
           return message.error(res.data.message, 2.5);
         } else {
@@ -177,23 +189,19 @@ function Menu() {
       })
       .then(async (res) => {
         await axios
-          .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+          .get(`http://localhost:3001/api/dish/get/${resID}`)
           .then(async (res) => {
-            setId(res.data.data._id);
-            console.log(id);
-            await axios
-              .get(`http://localhost:3001/api/dish/get/${resID}`)
-              .then(async (res) => {
-                await axios.put(
-                  `http://localhost:3001/api/profile/update/${id}`,
-                  {
-                    maxDiscount: Math.max(
-                      ...res.data.data.map((e) => e.dishDiscount)
-                    ),
-                  }
-                );
-              });
+            profileID !== "" &&
+              (await axios.put(
+                `http://localhost:3001/api/profile/update/${profileID}`,
+                {
+                  maxDiscount: Math.max(
+                    ...res.data.data.map((e) => e.dishDiscount)
+                  ),
+                }
+              ));
           });
+
         if (res.data.status === "ERR") {
           return message.error(res.data.message, 2.5);
         } else {
@@ -236,7 +244,22 @@ function Menu() {
       onOk() {
         axios
           .delete(`http://localhost:3001/api/dish/delete/${id}`)
-          .then(() => getDataDish());
+          .then(async () => {
+            await axios
+              .get(`http://localhost:3001/api/dish/get/${resID}`)
+              .then(async (res) => {
+                profileID !== "" &&
+                  (await axios.put(
+                    `http://localhost:3001/api/profile/update/${profileID}`,
+                    {
+                      maxDiscount: Math.max(
+                        ...res.data.data.map((e) => e.dishDiscount)
+                      ),
+                    }
+                  ));
+              });
+            getDataDish();
+          });
       },
       onCancel() {
         console.log("Cancel");

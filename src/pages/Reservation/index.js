@@ -1,91 +1,85 @@
 import { Layout, Space, Table, Typography } from "antd";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { getReservation } from "../../API";
 
-const Times = () => {
+const Reservation = () => {
   const [loading, setLoading] = useState(false);
-  const [times, setTimes] = useState([]);
+  const [dataOrders, setDataOrders] = useState([]);
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      await getReservation().then((res) => {
-        setTimes(res.data);
-        setLoading(false);
-      });
-    } catch (e) {
-      console.log(e);
-    }
+  const [resID, setResID] = useState("");
+
+  useEffect(() => {
+    setResID(localStorage.getItem("resID"));
+  }, []);
+
+  const getDataOrder = async () => {
+    resID
+      ? await axios
+          .get(`http://localhost:3001/api/order/get-details/${resID}`)
+          .then((res) => {
+            setDataOrders(res.data.data);
+            setLoading(false);
+          })
+          .catch((err) => {
+            if (err.code === "ERR_BAD_REQUEST") {
+              return setLoading(false);
+            } else console.log(err);
+          })
+      : setLoading(true);
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    getDataOrder();
+  }, [resID]);
 
   return (
     <Space direction="vertical">
       <Typography.Title level={4}>Reservation</Typography.Title>
       <Layout>
-        <Typography.Title level={5}>Today</Typography.Title>
         <Table
           loading={loading}
-          dataSource={times}
+          dataSource={dataOrders}
           columns={[
             {
-              title: "Shift",
-              dataIndex: "id",
+              title: "Date Order",
+              dataIndex: "dateOrder",
             },
             {
-              title: "Time Start",
-              dataIndex: "timeStart",
+              title: "Time Order",
+              dataIndex: "timeOrder",
             },
             {
-              title: "Time End",
-              dataIndex: "timeEnd",
+              title: "Table Name",
+              dataIndex: "tableName",
             },
             {
-              title: "Availables Tables",
-              dataIndex: "tables",
-              render: (tables) => {
-                return (
-                  <span>
-                    {tables.filter((e) => e.status === "available").length}/
-                    {tables.length}
-                  </span>
-                );
+              title: "Guest Name",
+              dataIndex: "guestName",
+            },
+            {
+              title: "Guest Phone",
+              dataIndex: "guestPhone",
+            },
+            {
+              title: "Number Of People",
+              dataIndex: "numberOfPeople",
+            },
+            {
+              title: "Completly Payment",
+              dataIndex: "completed",
+              render: (status) => {
+                if (status === true) {
+                  return <span>True</span>
+                } else return <span>False</span>
               },
             },
-          ]}
-        ></Table>
-      </Layout>
-      <Layout>
-        <Typography.Title level={5}>Tomorrow</Typography.Title>
-        <Table
-          loading={loading}
-          dataSource={times}
-          columns={[
             {
-              title: "Shift",
-              dataIndex: "id",
-            },
-            {
-              title: "Time Start",
-              dataIndex: "timeStart",
-            },
-            {
-              title: "Time End",
-              dataIndex: "timeEnd",
-            },
-            {
-              title: "Availables Tables",
-              dataIndex: "tables",
-              render: (tables) => {
-                return (
-                  <span>
-                    {tables.filter((e) => e.status === "available").length}/
-                    {tables.length}
-                  </span>
-                );
+              title: "Cancelled",
+              dataIndex: "cancelled",
+              render: (status) => {
+                if (status === true) {
+                  return <span>True</span>
+                } else return <span>False</span>
               },
             },
           ]}
@@ -95,4 +89,4 @@ const Times = () => {
   );
 };
 
-export default Times;
+export default Reservation;

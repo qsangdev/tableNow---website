@@ -89,10 +89,16 @@ const Register = () => {
         setlogInShow(true);
       })
       .catch((err) => {
-        return messageApi.open({
-          type: "error",
-          content: `${err.message}`,
-        });
+        if (err.response.data.message.includes("duplicate")) {
+          return message.error(
+            "User name, email or phone number is already available",
+            2.5
+          );
+        } else
+          return messageApi.open({
+            type: "error",
+            content: `${err.message}`,
+          });
       });
   };
 

@@ -76,8 +76,8 @@ function SideMenu() {
         .get(`http://localhost:3001/api/dish/get/${resID}`)
         .then((res) => {
           if (
-            res.data.data.filter((e) => e.dishType === "Dish").length < 3 ||
-            res.data.data.filter((e) => e.dishType === "Drink").length < 3
+            res.data.data.filter((e) => e.dishType === "Dish").length < 1 ||
+            res.data.data.filter((e) => e.dishType === "Drink").length < 1
           ) {
             return setDataMenu(false);
           } else {
@@ -118,14 +118,12 @@ function SideMenu() {
         .put(`http://localhost:3001/api/profile/update/${id}`, {
           active: true,
         })
-        .then((res) => console.log(res))
         .catch((err) => console.log(err));
     } else {
       await axios
         .put(`http://localhost:3001/api/profile/update/${id}`, {
           active: false,
         })
-        .then((res) => console.log(res))
         .catch((err) => console.log(err));
     }
   };
@@ -203,7 +201,7 @@ function SideMenu() {
           backgroundColor: "white",
           marginRight: 1,
           padding: 20,
-          height: "270vh",
+          height: "100vh",
           width: "199px",
         }}
       >

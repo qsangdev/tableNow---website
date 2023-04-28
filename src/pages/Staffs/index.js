@@ -107,7 +107,9 @@ function Staffs() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.data.message.includes("duplicate")){
+          return message.error("User name or phone number is already available", 2.5);
+        }
       });
   };
 

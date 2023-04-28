@@ -47,8 +47,8 @@ const Profile = () => {
 
   const [dataTables, setDataTables] = useState([]);
   const [editTable, setEditTable] = useState(false);
-  const [min, setMin] = useState(1);
-  const [max, setMax] = useState(4);
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
 
   const [disabledTables, setDisabledTables] = useState(true);
   const [tables, setTables] = useState("");
@@ -78,8 +78,10 @@ const Profile = () => {
     setDisabledTables(false);
   };
 
-  const handleEditTable = (id) => {
+  const handleEditTable = (id, max, min) => {
     setEditTable(id);
+    setMax(max);
+    setMin(min);
   };
 
   useEffect(() => {
@@ -399,7 +401,9 @@ const Profile = () => {
   };
 
   const handleSaveTable = async (name) => {
-    if (min > max) {
+    if (!min || !max) {
+      return message.warning("Cannot be left blank", 2.5);
+    } else if (min >= max) {
       return message.warning("Min can't be bigger than Max, you know?", 2.5);
     } else {
       await axios
@@ -664,7 +668,13 @@ const Profile = () => {
                       <Button
                         type="primary"
                         style={{ marginTop: 15 }}
-                        onClick={() => handleEditTable(item._id)}
+                        onClick={() =>
+                          handleEditTable(
+                            item._id,
+                            item.maxPeople,
+                            item.minPeople
+                          )
+                        }
                       >
                         Edit
                       </Button>

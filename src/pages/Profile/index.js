@@ -28,6 +28,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import GoogleMapReact from "google-map-react";
 import { getLatLng, geocodeByAddress } from "react-google-places-autocomplete";
+import Meta from "antd/es/card/Meta";
 
 const Profile = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -60,10 +61,12 @@ const Profile = () => {
 
   const handleEditName = () => {
     setDisabledName(false);
+    setName(dataSource.restaurantName);
   };
 
   const handleEditAddress = () => {
     setDisabledAddress(false);
+    setAddress(dataSource.restaurantAddress);
   };
 
   const handleEditTimes = (id) => {
@@ -72,6 +75,7 @@ const Profile = () => {
 
   const handleEditDes = () => {
     setDisabledDes(false);
+    setDescription(dataSource.restaurantDescribe);
   };
 
   const handleEditTables = () => {
@@ -433,19 +437,23 @@ const Profile = () => {
   return (
     <>
       {contextHolder}
-      <Space direction="vertical" style={{ alignItems: "center" }}>
+      <Space
+        direction="vertical"
+        style={{ alignItems: "center", maxWidth: "1000px" }}
+      >
         <Layout style={{ marginBottom: 20 }}>
           <Typography.Title level={3}>Infomation</Typography.Title>
           <Card
             title={"Name"}
             size="small"
             loading={loading}
-            style={{ marginTop: 10, width: "750px" }}
+            style={{ marginTop: 10 }}
           >
             <Input
-              style={{ width: "600px", marginRight: 10, height: "39px" }}
+              style={{ width: "660px", marginRight: 10, height: "39px" }}
               placeholder={dataSource.restaurantName}
               disabled={disabledName}
+              value={name}
               onChange={(e) => setName(e.target.value)}
             />
             {disabledName === false ? (
@@ -475,9 +483,10 @@ const Profile = () => {
             style={{ marginTop: 10 }}
           >
             <Input
-              style={{ width: "600px", marginRight: 10, height: "39px" }}
+              style={{ width: "660px", marginRight: 10, height: "39px" }}
               placeholder={dataSource.restaurantAddress}
               disabled={disabledAddress}
+              value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
             {disabledAddress === false ? (
@@ -523,9 +532,10 @@ const Profile = () => {
           >
             <TextArea
               rows={4}
-              style={{ width: "608px", marginRight: 10 }}
+              style={{ width: "660px", marginRight: 10 }}
               placeholder={dataSource.restaurantDescribe}
               disabled={disabledDes}
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
             {disabledDes === false ? (
@@ -554,7 +564,7 @@ const Profile = () => {
             style={{ marginTop: 10 }}
           >
             <Space>
-              <Typography.Title level={5} style={{ marginRight: "378px" }}>
+              <Typography.Title level={5} style={{ marginRight: "430px" }}>
                 Current : {dataSource.restaurantTable} Tables
               </Typography.Title>
               <InputNumber
@@ -577,7 +587,7 @@ const Profile = () => {
                   danger
                   onClick={handleSaveTables}
                 >
-                  Save
+                  Reset
                 </Button>
               ) : (
                 <Button
@@ -627,7 +637,7 @@ const Profile = () => {
                     {editTable === item._id ? (
                       <>
                         <p>
-                          Min People:{" "}
+                          Min Seats:{" "}
                           <InputNumber
                             min={1}
                             max={15}
@@ -638,7 +648,7 @@ const Profile = () => {
                           />
                         </p>
                         <p>
-                          Max People:{" "}
+                          Max Seats:{" "}
                           <InputNumber
                             min={1}
                             max={15}
@@ -651,8 +661,8 @@ const Profile = () => {
                       </>
                     ) : (
                       <>
-                        <p>Min People: {item.minPeople}</p>
-                        <p>Max People: {item.maxPeople}</p>
+                        <p>Min Seats: {item.minPeople}</p>
+                        <p>Max Seats: {item.maxPeople}</p>
                       </>
                     )}
                     {editTable === item._id ? (
@@ -786,6 +796,8 @@ const Profile = () => {
                 style={{
                   margin: 10,
                 }}
+                loading={loading}
+                cover={<Image src={e}></Image>}
               >
                 <Tooltip title="delete">
                   <Button
@@ -801,7 +813,7 @@ const Profile = () => {
                     icon={<CloseOutlined />}
                   />
                 </Tooltip>
-                <Image src={e}></Image>
+                <Meta title={dataSource.restaurantName}></Meta>
               </Card>
             );
           }}

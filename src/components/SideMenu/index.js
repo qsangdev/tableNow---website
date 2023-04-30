@@ -8,6 +8,7 @@ import {
   WarningOutlined,
   CheckCircleOutlined,
   ReloadOutlined,
+  FireOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, Space, Typography, message } from "antd";
 import axios from "axios";
@@ -193,6 +194,11 @@ function SideMenu() {
             label: "Ratings",
             key: "/ratings",
             icon: <StarOutlined />,
+          },
+          {
+            label: "Kitchen",
+            key: "/kitchen",
+            icon: <FireOutlined />,
           },
         ]}
       ></Menu>

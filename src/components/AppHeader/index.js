@@ -28,7 +28,7 @@ function AppHeader() {
         Table Now
       </Typography.Title>
       <Space>
-        <Button danger onClick={handleSignOut}>
+        <Button style={{ marginRight: 10 }} danger onClick={handleSignOut}>
           <PoweroffOutlined />
           Sign Out
         </Button>

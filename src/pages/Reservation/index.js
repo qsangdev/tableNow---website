@@ -1,5 +1,6 @@
-import { Layout, Space, Table, Typography } from "antd";
+import { Layout, Space, Table, Tag, Typography } from "antd";
 import axios from "axios";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 
 const Reservation = () => {
@@ -17,7 +18,11 @@ const Reservation = () => {
       ? await axios
           .get(`http://localhost:3001/api/order/get-details/${resID}`)
           .then((res) => {
-            setDataOrders(res.data.data);
+            setDataOrders(
+              res.data.data.sort(
+                (a, b) => moment(b.createdAt) - moment(a.createdAt)
+              )
+            );
             setLoading(false);
           })
           .catch((err) => {
@@ -39,6 +44,7 @@ const Reservation = () => {
         <Table
           loading={loading}
           dataSource={dataOrders}
+          pagination={1}
           columns={[
             {
               title: "Date Order",
@@ -68,18 +74,20 @@ const Reservation = () => {
               title: "Completly Payment",
               dataIndex: "completed",
               render: (status) => {
+                let color = status === true ? "geekblue" : "red";
                 if (status === true) {
-                  return <span>True</span>
-                } else return <span>False</span>
+                  return <Tag color={color}>TRUE</Tag>;
+                } else return <Tag color={color}>FALSE</Tag>;
               },
             },
             {
               title: "Cancelled",
               dataIndex: "cancelled",
               render: (status) => {
+                let color = status === true ? "geekblue" : "red";
                 if (status === true) {
-                  return <span>True</span>
-                } else return <span>False</span>
+                  return <Tag color={color}>TRUE</Tag>;
+                } else return <Tag color={color}>FALSE</Tag>;
               },
             },
           ]}

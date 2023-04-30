@@ -57,10 +57,10 @@ function Menu() {
     await axios
       .get(`http://localhost:3001/api/dish/get-details/${id}`)
       .then((res) => {
-        setName(res.data.data[0].dishName);
-        setPrice(res.data.data[0].dishPrice);
-        setDes(res.data.data[0].dishDescribe);
-        setDiscount(res.data.data[0].dishDiscount);
+        setName(res.data.data.dishName);
+        setPrice(res.data.data.dishPrice);
+        setDes(res.data.data.dishDescribe);
+        setDiscount(res.data.data.dishDiscount);
         setId("");
       });
   };
@@ -315,7 +315,9 @@ function Menu() {
         style={{
           flexDirection: "row",
           justifyContent: "center",
-          marginLeft: -10,
+          marginLeft: 200,
+          alignItems: "center",
+          maxWidth: "600px",
         }}
       >
         <Space direction="vertical" style={{ margin: 20 }}>

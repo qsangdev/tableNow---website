@@ -32,7 +32,7 @@ function Staffs() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [sex, setSex] = useState("male");
+  const [sex, setSex] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCf, setPasswordCf] = useState("");
@@ -107,8 +107,11 @@ function Staffs() {
         }
       })
       .catch((err) => {
-        if (err.response.data.message.includes("duplicate")){
-          return message.error("User name or phone number is already available", 2.5);
+        if (err.response.data.message.includes("duplicate")) {
+          return message.error(
+            "User name or phone number is already available",
+            2.5
+          );
         }
       });
   };
@@ -216,7 +219,9 @@ function Staffs() {
             marginTop: 10,
           }}
         >
-          <Typography.Title level={4}>Staffs (Minimum 3 staffs)</Typography.Title>
+          <Typography.Title level={4}>
+            Staffs (Minimum 3 staffs)
+          </Typography.Title>
           <Button type="primary" onClick={showModalStaff}>
             Create
           </Button>
@@ -229,7 +234,7 @@ function Staffs() {
         >
           <Select
             style={{ marginBottom: 10, width: "470px" }}
-            defaultValue="male"
+            placeholder="Select gender"
             options={[
               {
                 value: "male",

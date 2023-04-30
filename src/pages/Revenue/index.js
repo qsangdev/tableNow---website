@@ -3,7 +3,16 @@ import {
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Card, Layout, Space, Statistic, Table, Typography, Spin } from "antd";
+import {
+  Card,
+  Layout,
+  Space,
+  Statistic,
+  Table,
+  Typography,
+  Spin,
+  Tag,
+} from "antd";
 import { useEffect, useState } from "react";
 
 import {
@@ -35,6 +44,7 @@ function Orders() {
   const [dataStaff, setDataStaff] = useState([]);
   const [resID, setResID] = useState("");
   const [order, setOrder] = useState("");
+  const [staffRevenue, setStaffRevenue] = useState([]);
 
   useEffect(() => {
     setResID(localStorage.getItem("resID"));
@@ -104,6 +114,28 @@ function Orders() {
                   };
                 })
             );
+
+            const total = res.data.data.reduce((acc, curr) => {
+              const index = acc.findIndex(
+                (item) => item.staffID === curr.staffID
+              );
+              if (index !== -1) {
+                acc[index].totalPay += curr.totalPay;
+              } else {
+                acc.push(curr);
+              }
+              return acc;
+            }, []);
+
+            setStaffRevenue(
+              total.map((e) => {
+                return {
+                  staffName: dataStaff.filter((i) => i._id === e.staffID)[0]
+                    .staffName,
+                  revenue: e.totalPay,
+                };
+              })
+            );
             setLoading(false);
           })
           .catch((err) => {
@@ -124,20 +156,21 @@ function Orders() {
   });
 
   const revenue = () => {
-    const labels = dataBill.map((cart) => {
-      return `Guest: ${cart.guestName}`;
+    const labels = staffRevenue.map((cart) => {
+      return `Staff: ${cart.staffName}`;
     });
-    const data = dataBill.map((cart) => {
-      return cart.totalPay;
+
+    const data = staffRevenue.map((cart) => {
+      return cart.revenue;
     });
 
     const dataSource = {
       labels,
       datasets: [
         {
-          label: "Revenue",
+          label: "Dollar",
           data: data,
-          backgroundColor: "#AE87C1",
+          backgroundColor: "#1777FF",
         },
       ],
     };
@@ -147,7 +180,7 @@ function Orders() {
 
   useEffect(() => {
     revenue();
-  }, [dataBill]);
+  }, [staffRevenue]);
 
   const options = {
     responsive: true,
@@ -157,7 +190,7 @@ function Orders() {
       },
       title: {
         display: true,
-        text: "Order Revenue",
+        text: "By Employee",
       },
     },
   };
@@ -242,6 +275,11 @@ function Orders() {
         </Layout>
       )}
 
+      <Typography.Title level={5}>Revenue Statistics</Typography.Title>
+
+      <Card>
+        <Bar options={options} data={reveneuData} />
+      </Card>
       <Typography.Title level={5}>Bills</Typography.Title>
       <Table
         columns={[
@@ -291,20 +329,14 @@ function Orders() {
             title: "Total Pay",
             dataIndex: "totalPay",
             render: (total) => {
-              return <span>${total}</span>;
+              return <Tag color="green">${total}</Tag>;
             },
           },
         ]}
         loading={loading}
         dataSource={dataBill}
-        pagination={false}
+        pagination={1}
       ></Table>
-
-      <Typography.Title level={5}>Statistical</Typography.Title>
-
-      <Card>
-        <Bar options={options} data={reveneuData} />
-      </Card>
     </Space>
   );
 }

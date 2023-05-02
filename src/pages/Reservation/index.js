@@ -44,7 +44,7 @@ const Reservation = () => {
         <Table
           loading={loading}
           dataSource={dataOrders}
-          pagination={1}
+          pagination={{ pageSize: 10 }}
           columns={[
             {
               title: "Date Order",

@@ -335,7 +335,7 @@ function Orders() {
         ]}
         loading={loading}
         dataSource={dataBill}
-        pagination={1}
+        pagination={{ pageSize: 5 }}
       ></Table>
     </Space>
   );

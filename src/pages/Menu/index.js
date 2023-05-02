@@ -345,12 +345,14 @@ function Menu() {
               value={name}
               style={{ marginBottom: 10 }}
               placeholder="Name"
+              maxLength={25}
               onChange={(e) => setName(e.target.value)}
             ></Input>
             <Input
               value={des}
               style={{ marginBottom: 10 }}
               placeholder="Description"
+              maxLength={25}
               onChange={(e) => setDes(e.target.value)}
             ></Input>
             <Input
@@ -484,12 +486,14 @@ function Menu() {
               value={name}
               style={{ marginBottom: 10 }}
               placeholder="Name"
+              maxLength={25}
               onChange={(e) => setName(e.target.value)}
             ></Input>
             <Input
               value={des}
               style={{ marginBottom: 10 }}
               placeholder="Description"
+              maxLength={25}
               onChange={(e) => setDes(e.target.value)}
             ></Input>
             <Input
@@ -606,12 +610,14 @@ function Menu() {
               value={name}
               style={{ marginBottom: 10 }}
               placeholder="Name"
+              maxLength={25}
               onChange={(e) => setName(e.target.value)}
             ></Input>
             <Input
               value={des}
               style={{ marginBottom: 10 }}
               placeholder="Description"
+              maxLength={25}
               onChange={(e) => setDes(e.target.value)}
             ></Input>
             <Input

@@ -225,21 +225,24 @@ const Profile = () => {
           name: "Table " + (i + 1),
           minPeople: 1,
           maxPeople: 4,
-          status: "available",
+          dateOrder: "empty",
+          timeOrder: "empty",
         },
         {
           shift: 2,
           name: "Table " + (i + 1),
           minPeople: 1,
           maxPeople: 4,
-          status: "available",
+          dateOrder: "empty",
+          timeOrder: "empty",
         },
         {
           shift: 3,
           name: "Table " + (i + 1),
           minPeople: 1,
           maxPeople: 4,
-          status: "available",
+          dateOrder: "empty",
+          timeOrder: "empty",
         },
       ];
     }
@@ -454,6 +457,7 @@ const Profile = () => {
               placeholder={dataSource.restaurantName}
               disabled={disabledName}
               value={name}
+              maxLength={30}
               onChange={(e) => setName(e.target.value)}
             />
             {disabledName === false ? (
@@ -536,6 +540,7 @@ const Profile = () => {
               placeholder={dataSource.restaurantDescribe}
               disabled={disabledDes}
               value={description}
+              maxLength={150}
               onChange={(e) => setDescription(e.target.value)}
             />
             {disabledDes === false ? (

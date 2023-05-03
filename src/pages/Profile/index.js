@@ -225,24 +225,18 @@ const Profile = () => {
           name: "Table " + (i + 1),
           minPeople: 1,
           maxPeople: 4,
-          dateOrder: "empty",
-          timeOrder: "empty",
         },
         {
           shift: 2,
           name: "Table " + (i + 1),
           minPeople: 1,
           maxPeople: 4,
-          dateOrder: "empty",
-          timeOrder: "empty",
         },
         {
           shift: 3,
           name: "Table " + (i + 1),
           minPeople: 1,
           maxPeople: 4,
-          dateOrder: "empty",
-          timeOrder: "empty",
         },
       ];
     }

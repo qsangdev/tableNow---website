@@ -109,7 +109,7 @@ const Kitchen = () => {
       <Layout>
         <Table
           loading={loading}
-          dataSource={dataOrdersMenu}
+          dataSource={dataOrdersMenu.filter((e) => e.ordered.length > 0)}
           columns={[
             {
               title: "Table Name",

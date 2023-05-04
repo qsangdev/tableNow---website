@@ -61,7 +61,6 @@ function Menu() {
         setPrice(res.data.data.dishPrice);
         setDes(res.data.data.dishDescribe);
         setDiscount(res.data.data.dishDiscount);
-        setId("");
       });
   };
 

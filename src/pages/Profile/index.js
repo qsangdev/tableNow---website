@@ -439,7 +439,7 @@ const Profile = () => {
         style={{ alignItems: "center", maxWidth: "1000px" }}
       >
         <Layout style={{ marginBottom: 20 }}>
-          <Typography.Title level={3}>Infomation</Typography.Title>
+          <Typography.Title level={3}>Information</Typography.Title>
           <Card
             title={"Name"}
             size="small"

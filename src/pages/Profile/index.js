@@ -796,7 +796,7 @@ const Profile = () => {
                   margin: 10,
                 }}
                 loading={loading}
-                cover={<Image src={e}></Image>}
+                cover={<Image height={200} src={e}></Image>}
               >
                 <Tooltip title="delete">
                   <Button

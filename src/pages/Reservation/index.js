@@ -71,7 +71,7 @@ const Reservation = () => {
               dataIndex: "numberOfPeople",
             },
             {
-              title: "Completly Payment",
+              title: "Completed Payment",
               dataIndex: "completed",
               render: (status) => {
                 let color = status === true ? "geekblue" : "red";

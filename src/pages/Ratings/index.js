@@ -18,7 +18,7 @@ const Ratings = () => {
     try {
       setLoading(true);
       await axios
-        .get(`http://localhost:3001/api/rating/get-details/${resID}`)
+        .get(`https://tablenow.onrender.com/api/rating/get-details/${resID}`)
         .then((res) => {
           setDataRating(res.data.data);
           setLoading(false);

@@ -50,7 +50,7 @@ function Staffs() {
       icon: <ExclamationCircleFilled />,
       onOk() {
         axios
-          .delete(`http://localhost:3001/api/staffs/delete/${id}`)
+          .delete(`https://tablenow.onrender.com/api/staffs/delete/${id}`)
           .then(() => getDataStaffs());
       },
       onCancel() {
@@ -67,7 +67,7 @@ function Staffs() {
     setId(id);
     setIsModalEdit(true);
     await axios
-      .get(`http://localhost:3001/api/staffs/get-details/${id}`)
+      .get(`https://tablenow.onrender.com/api/staffs/get-details/${id}`)
       .then((res) => {
         setSex(res.data.data.staffSex);
         setName(res.data.data.staffName);
@@ -82,7 +82,7 @@ function Staffs() {
       content: "Creating..",
     });
     await axios
-      .post("http://localhost:3001/api/staffs/create", {
+      .post("https://tablenow.onrender.com/api/staffs/create", {
         restaurantID: resID,
         staffName: name,
         staffPhone: phone,
@@ -131,7 +131,7 @@ function Staffs() {
     setLoading(true);
     resID
       ? await axios
-          .get(`http://localhost:3001/api/staffs/get-staff/${resID}`)
+          .get(`https://tablenow.onrender.com/api/staffs/get-staff/${resID}`)
           .then((res) => {
             setDataStaffs(res.data.data);
             setLoading(false);
@@ -154,7 +154,7 @@ function Staffs() {
       content: "Updating..",
     });
     await axios
-      .put(`http://localhost:3001/api/staffs/update/${id}`, {
+      .put(`https://tablenow.onrender.com/api/staffs/update/${id}`, {
         staffSex: sex,
         staffName: name,
         staffPhone: phone,
@@ -198,7 +198,7 @@ function Staffs() {
       duration: 2.5,
     });
     axios
-      .post(`http://localhost:3001/api/staffs/upload/${id}`, bodyFormData, {
+      .post(`https://tablenow.onrender.com/api/staffs/upload/${id}`, bodyFormData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {

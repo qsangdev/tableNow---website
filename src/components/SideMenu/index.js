@@ -34,7 +34,7 @@ function SideMenu() {
   const getDataProfile = async () => {
     resID &&
       (await axios
-        .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+        .get(`https://tablenow.onrender.com/api/profile/get-details/${resID}`)
         .then((res) => {
           setId(res.data.data._id);
           if (res.data.status === "ERR") {
@@ -59,7 +59,7 @@ function SideMenu() {
   const getDataTables = async () => {
     resID &&
       (await axios
-        .get(`http://localhost:3001/api/table/get-details/${resID}`)
+        .get(`https://tablenow.onrender.com/api/table/get-details/${resID}`)
         .then((res) => {
           if (res.data.status === "ERR") {
             return message.error(res.data.message, 2.5);
@@ -74,7 +74,7 @@ function SideMenu() {
   const getDataMenu = async () => {
     resID &&
       (await axios
-        .get(`http://localhost:3001/api/dish/get/${resID}`)
+        .get(`https://tablenow.onrender.com/api/dish/get/${resID}`)
         .then((res) => {
           if (
             res.data.data.filter((e) => e.dishType === "Dish").length < 1 ||
@@ -95,7 +95,7 @@ function SideMenu() {
   const getDataStaffs = async () => {
     resID &&
       (await axios
-        .get(`http://localhost:3001/api/staffs/get-staff/${resID}`)
+        .get(`https://tablenow.onrender.com/api/staffs/get-staff/${resID}`)
         .then((res) => {
           if (res.data.data.length < 3) {
             return setDataStaffs(false);
@@ -116,13 +116,13 @@ function SideMenu() {
       dataTables === true
     ) {
       return await axios
-        .put(`http://localhost:3001/api/profile/update/${id}`, {
+        .put(`https://tablenow.onrender.com/api/profile/update/${id}`, {
           active: true,
         })
         .catch((err) => console.log(err));
     } else {
       await axios
-        .put(`http://localhost:3001/api/profile/update/${id}`, {
+        .put(`https://tablenow.onrender.com/api/profile/update/${id}`, {
           active: false,
         })
         .catch((err) => console.log(err));

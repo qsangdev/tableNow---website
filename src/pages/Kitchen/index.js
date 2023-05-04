@@ -20,7 +20,7 @@ const Kitchen = () => {
   const getDataOrder = async () => {
     resID
       ? await axios
-          .get(`http://localhost:3001/api/order/get-details/${resID}`)
+          .get(`https://tablenow.onrender.com/api/order/get-details/${resID}`)
           .then((res) => {
             setDataOrder(res.data.data);
             setLoading(false);
@@ -40,7 +40,7 @@ const Kitchen = () => {
   const getDataMenu = async () => {
     resID
       ? await axios
-          .get(`http://localhost:3001/api/dish/get/${resID}`)
+          .get(`https://tablenow.onrender.com/api/dish/get/${resID}`)
           .then((res) => {
             setDataMenu(res.data.data);
             setLoading(false);
@@ -60,7 +60,7 @@ const Kitchen = () => {
   const getDataOrderMenu = async () => {
     resID && dataOrder && dataMenu
       ? await axios
-          .get(`http://localhost:3001/api/order-menu/get/${resID}`)
+          .get(`https://tablenow.onrender.com/api/order-menu/get/${resID}`)
           .then((res) => {
             setDataOrderMenu(
               res.data.data
@@ -97,7 +97,7 @@ const Kitchen = () => {
 
   const checkDone = async (id) => {
     await axios
-      .put(`http://localhost:3001/api/order-menu/update-status/${id}`, {
+      .put(`https://tablenow.onrender.com/api/order-menu/update-status/${id}`, {
         done: true,
       })
       .then(() => getDataOrderMenu());

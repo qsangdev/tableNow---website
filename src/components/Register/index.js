@@ -27,7 +27,7 @@ const Register = () => {
       content: "Creating a new account..",
     });
     await axios
-      .post("http://localhost:3001/api/user/sign-up", {
+      .post("https://tablenow.onrender.com/api/user/sign-up", {
         Username: nameSignUp,
         email: emailSignUp,
         password: passSignUp,
@@ -43,7 +43,7 @@ const Register = () => {
           });
         }
         await axios
-          .post("http://localhost:3001/api/profile/create", {
+          .post("https://tablenow.onrender.com/api/profile/create", {
             restaurantID: res.data.data._id,
             restaurantName: "empty",
             restaurantAddress: "empty",
@@ -63,7 +63,7 @@ const Register = () => {
               });
             }
             await axios
-              .post("http://localhost:3001/api/table/create/", {
+              .post("https://tablenow.onrender.com/api/table/create/", {
                 restaurantID: res.data.data.restaurantID,
               })
               .then((res) => {
@@ -104,7 +104,7 @@ const Register = () => {
 
   const handleLogIn = async () => {
     await axios
-      .post("http://localhost:3001/api/user/sign-in", {
+      .post("https://tablenow.onrender.com/api/user/sign-in", {
         Username: nameLogIn,
         password: passLogIn,
       })
@@ -121,7 +121,7 @@ const Register = () => {
             "Authorization"
           ] = `Bearer ${res.data.access_token}`;
           await axios
-            .get(`http://localhost:3001/api/profile/get-details/${res.data.id}`)
+            .get(`https://tablenow.onrender.com/api/profile/get-details/${res.data.id}`)
             .then(() => {
               window.location.reload();
             });

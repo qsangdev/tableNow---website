@@ -53,7 +53,7 @@ function Orders() {
   const getDataOrder = async () => {
     resID
       ? await axios
-          .get(`http://localhost:3001/api/order/get-details/${resID}`)
+          .get(`https://tablenow.onrender.com/api/order/get-details/${resID}`)
           .then((res) => {
             setOrder(res.data.data.length);
             setDataOrder(res.data.data.filter((e) => e.completed === true));
@@ -74,7 +74,7 @@ function Orders() {
   const getDataStaff = async () => {
     resID
       ? await axios
-          .get(`http://localhost:3001/api/staffs/get-staff/${resID}`)
+          .get(`https://tablenow.onrender.com/api/staffs/get-staff/${resID}`)
           .then((res) => {
             setDataStaff(res.data.data);
             setLoading(false);
@@ -94,7 +94,7 @@ function Orders() {
   const getDataBill = async () => {
     resID && dataOrder && dataStaff
       ? await axios
-          .get(`http://localhost:3001/api/bill/get-details/${resID}`)
+          .get(`https://tablenow.onrender.com/api/bill/get-details/${resID}`)
           .then((res) => {
             setDataBill(
               res.data.data

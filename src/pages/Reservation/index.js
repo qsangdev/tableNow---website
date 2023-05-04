@@ -16,7 +16,7 @@ const Reservation = () => {
   const getDataOrder = async () => {
     resID
       ? await axios
-          .get(`http://localhost:3001/api/order/get-details/${resID}`)
+          .get(`https://tablenow.onrender.com/api/order/get-details/${resID}`)
           .then((res) => {
             setDataOrders(
               res.data.data.sort(

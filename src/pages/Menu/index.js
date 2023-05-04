@@ -55,7 +55,7 @@ function Menu() {
     setId(id);
     setIsModalEdit(true);
     await axios
-      .get(`http://localhost:3001/api/dish/get-details/${id}`)
+      .get(`https://tablenow.onrender.com/api/dish/get-details/${id}`)
       .then((res) => {
         setName(res.data.data.dishName);
         setPrice(res.data.data.dishPrice);
@@ -68,7 +68,7 @@ function Menu() {
   const getIdProfile = async () => {
     resID &&
       (await axios
-        .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+        .get(`https://tablenow.onrender.com/api/profile/get-details/${resID}`)
         .then((res) => {
           setProfileID(res.data.data._id);
         }));
@@ -84,7 +84,7 @@ function Menu() {
       content: "Updating..",
     });
     await axios
-      .put(`http://localhost:3001/api/dish/update/${id}`, {
+      .put(`https://tablenow.onrender.com/api/dish/update/${id}`, {
         dishName: name,
         dishDescribe: des,
         dishPrice: price,
@@ -119,7 +119,7 @@ function Menu() {
       content: "Creating..",
     });
     await axios
-      .post("http://localhost:3001/api/dish/create", {
+      .post("https://tablenow.onrender.com/api/dish/create", {
         restaurantID: resID,
         dishName: name,
         dishType: "Dish",
@@ -129,11 +129,11 @@ function Menu() {
       })
       .then(async (res) => {
         await axios
-          .get(`http://localhost:3001/api/dish/get/${resID}`)
+          .get(`https://tablenow.onrender.com/api/dish/get/${resID}`)
           .then(async (res) => {
             profileID !== "" &&
               (await axios.put(
-                `http://localhost:3001/api/profile/update/${profileID}`,
+                `https://tablenow.onrender.com/api/profile/update/${profileID}`,
                 {
                   maxDiscount: Math.max(
                     ...res.data.data.map((e) => e.dishDiscount)
@@ -179,7 +179,7 @@ function Menu() {
       content: "Creating..",
     });
     await axios
-      .post("http://localhost:3001/api/dish/create", {
+      .post("https://tablenow.onrender.com/api/dish/create", {
         restaurantID: resID,
         dishName: name,
         dishType: "Drink",
@@ -189,11 +189,11 @@ function Menu() {
       })
       .then(async (res) => {
         await axios
-          .get(`http://localhost:3001/api/dish/get/${resID}`)
+          .get(`https://tablenow.onrender.com/api/dish/get/${resID}`)
           .then(async (res) => {
             profileID !== "" &&
               (await axios.put(
-                `http://localhost:3001/api/profile/update/${profileID}`,
+                `https://tablenow.onrender.com/api/profile/update/${profileID}`,
                 {
                   maxDiscount: Math.max(
                     ...res.data.data.map((e) => e.dishDiscount)
@@ -243,14 +243,14 @@ function Menu() {
       icon: <ExclamationCircleFilled />,
       onOk() {
         axios
-          .delete(`http://localhost:3001/api/dish/delete/${id}`)
+          .delete(`https://tablenow.onrender.com/api/dish/delete/${id}`)
           .then(async () => {
             await axios
-              .get(`http://localhost:3001/api/dish/get/${resID}`)
+              .get(`https://tablenow.onrender.com/api/dish/get/${resID}`)
               .then(async (res) => {
                 profileID !== "" &&
                   (await axios.put(
-                    `http://localhost:3001/api/profile/update/${profileID}`,
+                    `https://tablenow.onrender.com/api/profile/update/${profileID}`,
                     {
                       maxDiscount: Math.max(
                         ...res.data.data.map((e) => e.dishDiscount)
@@ -271,7 +271,7 @@ function Menu() {
     setLoading(true);
     resID
       ? await axios
-          .get(`http://localhost:3001/api/dish/get/${resID}`)
+          .get(`https://tablenow.onrender.com/api/dish/get/${resID}`)
           .then((res) => {
             setDataDish(res.data.data.filter((e) => e.dishType === "Dish"));
             setDataDrink(res.data.data.filter((e) => e.dishType === "Drink"));
@@ -299,7 +299,7 @@ function Menu() {
       duration: 2.5,
     });
     axios
-      .post(`http://localhost:3001/api/dish/upload/${id}`, bodyFormData, {
+      .post(`https://tablenow.onrender.com/api/dish/upload/${id}`, bodyFormData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {

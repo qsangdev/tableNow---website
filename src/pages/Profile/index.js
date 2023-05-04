@@ -98,7 +98,7 @@ const Profile = () => {
       icon: <ExclamationCircleFilled />,
       onOk: async () => {
         await axios
-          .post(`http://localhost:3001/api/profile/delete-image/${resID}`, {
+          .post(`https://tablenow.onrender.com/api/profile/delete-image/${resID}`, {
             images: e,
           })
           .then((res) => {
@@ -122,7 +122,7 @@ const Profile = () => {
   const handleSaveName = async () => {
     name
       ? await axios
-          .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
+          .put(`https://tablenow.onrender.com/api/profile/update/${dataSource._id}`, {
             restaurantName: name,
           })
           .then((res) => {
@@ -174,7 +174,7 @@ const Profile = () => {
       return time
         ? await axios
             .post(
-              `http://localhost:3001/api/profile/update-time/${dataSource._id}`,
+              `https://tablenow.onrender.com/api/profile/update-time/${dataSource._id}`,
               {
                 shiftTime: [
                   {
@@ -196,7 +196,7 @@ const Profile = () => {
   const handleSaveAddress = async () => {
     address
       ? await axios
-          .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
+          .put(`https://tablenow.onrender.com/api/profile/update/${dataSource._id}`, {
             restaurantAddress: address,
           })
           .then(() => {
@@ -209,7 +209,7 @@ const Profile = () => {
   const handleSaveDes = async () => {
     description
       ? await axios
-          .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
+          .put(`https://tablenow.onrender.com/api/profile/update/${dataSource._id}`, {
             restaurantDescribe: description,
           })
           .then(setDisabledDes(true))
@@ -252,7 +252,7 @@ const Profile = () => {
     });
     tables && allTables !== []
       ? await axios
-          .put(`http://localhost:3001/api/table/update/${resID}`, {
+          .put(`https://tablenow.onrender.com/api/table/update/${resID}`, {
             tables: allTables,
           })
           .then(async (res) => {
@@ -261,7 +261,7 @@ const Profile = () => {
               return message.error(res.data.message, 2.5);
             } else {
               await axios.put(
-                `http://localhost:3001/api/profile/update/${dataSource._id}`,
+                `https://tablenow.onrender.com/api/profile/update/${dataSource._id}`,
                 {
                   restaurantTable: tables,
                 }
@@ -278,7 +278,7 @@ const Profile = () => {
     setLoading(true);
     resID
       ? await axios
-          .get(`http://localhost:3001/api/profile/get-details/${resID}`)
+          .get(`https://tablenow.onrender.com/api/profile/get-details/${resID}`)
           .then((res) => {
             if (res.data.status === "ERR") {
               return message.error(res.data.message, 2.5);
@@ -296,7 +296,7 @@ const Profile = () => {
     setLoading(true);
     resID
       ? await axios
-          .get(`http://localhost:3001/api/table/get-details/${resID}`)
+          .get(`https://tablenow.onrender.com/api/table/get-details/${resID}`)
           .then((res) => {
             if (res.data.status === "ERR") {
               return message.error(res.data.message, 2.5);
@@ -332,7 +332,7 @@ const Profile = () => {
       const latlong = await getLatLng(results[0]);
       setCoords(latlong);
       await axios
-        .put(`http://localhost:3001/api/profile/update/${dataSource._id}`, {
+        .put(`https://tablenow.onrender.com/api/profile/update/${dataSource._id}`, {
           latitude: latlong.lat,
           longitude: latlong.lng,
         })
@@ -353,7 +353,7 @@ const Profile = () => {
       duration: 2.5,
     });
     axios
-      .post(`http://localhost:3001/api/profile/upload/${resID}`, bodyFormData, {
+      .post(`https://tablenow.onrender.com/api/profile/upload/${resID}`, bodyFormData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
@@ -368,7 +368,7 @@ const Profile = () => {
       icon: <ExclamationCircleFilled />,
       onOk: async () => {
         await axios
-          .post(`http://localhost:3001/api/table/delete/${resID}`, {
+          .post(`https://tablenow.onrender.com/api/table/delete/${resID}`, {
             tables: [
               {
                 name: name,
@@ -378,7 +378,7 @@ const Profile = () => {
           .then(async (res) => {
             await axios
               .put(
-                `http://localhost:3001/api/profile/update/${dataSource._id}`,
+                `https://tablenow.onrender.com/api/profile/update/${dataSource._id}`,
                 {
                   restaurantTable: dataSource.restaurantTable - 1,
                 }
@@ -408,7 +408,7 @@ const Profile = () => {
       return message.warning("Min can't be bigger than Max, you know?", 2.5);
     } else {
       await axios
-        .post(`http://localhost:3001/api/table/update-minmax/${resID}`, {
+        .post(`https://tablenow.onrender.com/api/table/update-minmax/${resID}`, {
           tables: [
             {
               name: name,

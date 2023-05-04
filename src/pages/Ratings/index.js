@@ -33,16 +33,17 @@ const Ratings = () => {
   }, [resID]);
 
   return (
-    <Space direction="vertical">
+    <Space direction="vertical" style={{ maxWidth: "1500px" }}>
       <Typography.Title level={3}>Rating</Typography.Title>
       <List
         grid={{
           xs: 1,
-          sm: 2,
-          md: 2,
-          lg: 3,
-          xl: 3.5,
-          xxl: 4,
+          sm: 3,
+          md: 3,
+          lg: 4,
+          xl: 5,
+          xxl: 6,
+          gutter: 10,
         }}
         loading={loading}
         dataSource={dataRating.sort(
@@ -54,10 +55,10 @@ const Ratings = () => {
               size="small"
               title={e.ratingName}
               key={e._id}
-              style={{ margin: 50, width: "200px", height: "180px" }}
+              style={{ margin: 50, width: "200px", maxHeight: "250px" }}
             >
               <div>
-                <p>"{e.ratingComment}"</p>
+                <p>{moment(e.createdAt).format("HH:mm DD/MM/YYYY")}</p>
 
                 {[...Array(e.ratingStar)].map((e, i) => {
                   return (
@@ -67,8 +68,7 @@ const Ratings = () => {
                     />
                   );
                 })}
-
-                <p>{moment(e.createdAt).format("HH:mm DD/MM/YYYY")}</p>
+                <p>{e.ratingComment}</p>
               </div>
             </Card>
           );

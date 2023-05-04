@@ -80,6 +80,7 @@ const Profile = () => {
 
   const handleEditTables = () => {
     setDisabledTables(false);
+    setTables(dataSource.restaurantTable);
   };
 
   const handleEditTable = (id, max, min) => {
@@ -572,6 +573,7 @@ const Profile = () => {
                 size="large"
                 defaultValue={dataSource.restaurantTable}
                 disabled={disabledTables}
+                value={tables}
                 onChange={(e) => setTables(e)}
                 style={{
                   fontSize: 25,

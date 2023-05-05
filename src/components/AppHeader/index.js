@@ -13,7 +13,7 @@ function AppHeader() {
       onOk() {
         localStorage.removeItem("access_token");
         localStorage.removeItem("resID");
-        window.location.reload();
+        window.location.href = "https://tablenow.vercel.app";
       },
       onCancel() {
         console.log("Cancel");

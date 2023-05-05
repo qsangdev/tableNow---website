@@ -36,15 +36,7 @@ const Ratings = () => {
     <Space direction="vertical" style={{ maxWidth: "1500px" }}>
       <Typography.Title level={3}>Rating</Typography.Title>
       <List
-        grid={{
-          xs: 1,
-          sm: 3,
-          md: 3,
-          lg: 4,
-          xl: 5,
-          xxl: 6,
-          gutter: 10,
-        }}
+        grid
         loading={loading}
         dataSource={dataRating.sort(
           (a, b) => moment(b.createdAt) - moment(a.createdAt)
@@ -68,7 +60,11 @@ const Ratings = () => {
                     />
                   );
                 })}
-                <p>{e.ratingComment}</p>
+                <p>
+                  {e.ratingComment.length > 27
+                    ? `${e.ratingComment.slice(0, 27)}..`
+                    : e.ratingComment}
+                  </p>
               </div>
             </Card>
           );

@@ -437,7 +437,7 @@ const Profile = () => {
       {contextHolder}
       <Space
         direction="vertical"
-        style={{ alignItems: "center", maxWidth: "1000px" }}
+        style={{ alignItems: "center", maxWidth: "880px" }}
       >
         <Layout style={{ marginBottom: 20 }}>
           <Typography.Title level={3}>Information</Typography.Title>
@@ -782,14 +782,7 @@ const Profile = () => {
         <List
           loading={loading}
           dataSource={dataSource.images}
-          grid={{
-            xs: 1,
-            sm: 1.5,
-            md: 2,
-            lg: 3,
-            xl: 3.5,
-            xxl: 4,
-          }}
+          grid
           renderItem={(e) => {
             return (
               <Card

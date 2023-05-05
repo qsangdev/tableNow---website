@@ -789,6 +789,7 @@ const Profile = () => {
                 key={e.id}
                 style={{
                   margin: 10,
+                  width: 200,
                 }}
                 loading={loading}
                 cover={<Image height={200} src={e}></Image>}
